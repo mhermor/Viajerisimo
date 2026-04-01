@@ -1,0 +1,74 @@
+<div class="explora-container">
+  <h2>Explora por Categoría</h2>
+
+  <div class="categoria-menu">
+    <button (click)="setCategory('playa')" [class.active]="isVisible('playa')">Playa</button>
+    <button (click)="setCategory('montaña')" [class.active]="isVisible('montaña')">Montaña</button>
+    <button (click)="setCategory('ciudad')" [class.active]="isVisible('ciudad')">Ciudad</button>
+  </div>
+
+  <div class="categoria-content">
+    <div class="destinos-grid" [class.hidden]="!isVisible('playa')">
+      <div class="card">
+        <img src="assets/bali.jpg" alt="Bali">
+        <div class="card-overlay">
+          <div class="card-content">
+            <h3>Bali, Indonesia</h3>
+            <p>Playas paradisíacas y cultura vibrante en una isla tropical.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="assets/maldives.jpg" alt="Maldivas">
+        <div class="card-overlay">
+          <div class="card-content">
+            <h3>Maldivas</h3>
+            <p>Aguas cristalinas y cabañas sobre el mar.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="destinos-grid" [class.hidden]="!isVisible('montaña')">
+      <div class="card">
+        <img src="assets/alpes.jpg" alt="Alpes">
+        <div class="card-overlay">
+          <div class="card-content">
+            <h3>Alpes Suizos</h3>
+            <p>Escenarios nevados, esquí y paisajes impresionantes.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="assets/andes.jpg" alt="Andes">
+        <div class="card-overlay">
+          <div class="card-content">
+            <h3>Cordillera de los Andes</h3>
+            <p>Aventuras de altura en Sudamérica.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="destinos-grid" [class.hidden]="!isVisible('ciudad')">
+      <div class="card">
+        <img src="assets/ny.jpg" alt="Nueva York">
+        <div class="card-overlay">
+          <div class="card-content">
+            <h3>Nueva York, EE.UU.</h3>
+            <p>Rascacielos, arte, comida y vida sin pausa.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="assets/barcelona.jpg" alt="Barcelona">
+        <div class="card-overlay">
+          <div class="card-content">
+            <h3>Barcelona, España</h3>
+            <p>Arquitectura única, playa urbana y cultura mediterránea.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+.home {
+    position: relative;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    overflow: hidden;
+  }
+  
+  .home .overlay {
+    background-color: rgba(0, 0, 0, 0.5); /* oscurece la imagen para mejor legibilidad */
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 90%;
+  }
+  
+  .home h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .home p {
+    font-size: 1.5rem;
+  }
+  

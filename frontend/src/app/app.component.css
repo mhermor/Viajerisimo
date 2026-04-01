@@ -1,0 +1,21 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 1rem;
+  padding-top: 100px;
+  background-image: url('/assets/360_F_508045046_yUCqrQUoUMN5KUCTcNoL3LxrecOc1q2b.jpg');
+  background-size: cover;
+  background-position: center;
+  box-sizing: border-box;
+}
+

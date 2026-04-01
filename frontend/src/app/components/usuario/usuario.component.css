@@ -1,0 +1,72 @@
+.login-container, .perfil-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #F3F3F3;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.login-container input {
+  display: block;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0.25rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #2B7A78;
+  color: white;
+}
+
+button.logout {
+  background-color: #D9534F;
+}
+
+.perfil-info p {
+  margin: 0.5rem 0;
+}
+
+.perfil-actions {
+  margin-top: 1.5rem;
+}
+.seccion {
+    margin-top: 1.5rem;
+  }
+  
+  .destinos li {
+    list-style: none;
+    padding: 0.3rem 0;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+  }
+  
+  table th, table td {
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    text-align: left;
+  }
+  
+  .badges {
+    margin-top: 0.5rem;
+  }
+  
+  .badge {
+    display: inline-block;
+    background-color: #2B7A78;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    margin: 0.2rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+  }
+  

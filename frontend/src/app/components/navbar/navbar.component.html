@@ -1,0 +1,19 @@
+<!-- Logo fijo fuera del sidebar -->
+<link href='https://fonts.googleapis.com/css?family=Sour Gummy' rel='stylesheet'>
+<div class="logo-fixed">
+  <span class="brand">Viajerísimo</span>
+  <span class="icon">✈️</span>
+</div>
+
+<!-- Botón hamburguesa -->
+<button class="hamburger" (click)="toggleMenu()">☰</button>
+
+<!-- Sidebar -->
+<nav class="sidebar" [class.open]="isOpen">
+  <ul class="nav-links">
+    <li><a href="/" (click)="closeMenu()">INICIO</a></li>
+    <li><a href="/busqueda" (click)="closeMenu()">BUSQUEDA</a></li>
+    <li><a href="/explora" (click)="closeMenu()">EXPLORA</a></li>
+    <li><a href="/usuario" (click)="closeMenu()">PERFIL DE USUARIO</a></li>
+  </ul>
+</nav>

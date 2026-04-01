@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id         Int         @id @default(autoincrement())
+  nombre     String
+  email      String      @unique
+  password   String
+  rol        String      @default("usuario")
+  creadoEn   DateTime    @default(now())
+  reservas   Reserva[]
+  resenas    Resena[]
+}
+
+model Destino {
+  id          Int         @id @default(autoincrement())
+  nombre      String
+  descripcion String
+  categoria   String
+  imagen      String?
+  pais        String
+  precio      Float
+  creadoEn    DateTime    @default(now())
+  reservas    Reserva[]
+  resenas     Resena[]
+}
+
+model Reserva {
+  id          Int       @id @default(autoincrement())
+  usuarioId   Int
+  destinoId   Int
+  fechaInicio DateTime
+  fechaFin    DateTime
+  estado      String    @default("pendiente")
+  creadoEn    DateTime  @default(now())
+  usuario     Usuario   @relation(fields: [usuarioId], references: [id])
+  destino     Destino   @relation(fields: [destinoId], references: [id])
+}
+
+model Resena {
+  id          Int       @id @default(autoincrement())
+  usuarioId   Int
+  destinoId   Int
+  puntuacion  Int
+  comentario  String
+  creadoEn    DateTime  @default(now())
+  usuario     Usuario   @relation(fields: [usuarioId], references: [id])
+  destino     Destino   @relation(fields: [destinoId], references: [id])
+}

@@ -1,0 +1,59 @@
+.logo-fixed {
+  position: fixed;
+  top: 1rem;
+  left: 3.5rem;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-family: 'Sour Gummy';
+  font-weight: bold;
+  color: #2a7a64;
+  gap: 0.4rem;
+}
+
+.hamburger {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1001;
+  font-size: 1.5rem;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100%;
+  background-color: #ffffff;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  padding: 3rem 1.5rem;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-links li {
+  margin: 1rem 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
