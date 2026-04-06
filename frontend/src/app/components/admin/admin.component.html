@@ -1,0 +1,49 @@
+<div class="admin-container">
+  <h1>Panel de Administración</h1>
+  <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+
+  <button class="btn-nuevo" (click)="nuevoDestino()">+ Añadir destino</button>
+
+  <div class="formulario" *ngIf="mostrarFormulario">
+    <h2>{{ editando ? 'Editar destino' : 'Nuevo destino' }}</h2>
+    <input type="text" placeholder="Nombre" [(ngModel)]="destinoActual.nombre" />
+    <input type="text" placeholder="País" [(ngModel)]="destinoActual.pais" />
+    <select [(ngModel)]="destinoActual.categoria">
+      <option value="">Selecciona categoría</option>
+      <option value="playa">Playa</option>
+      <option value="montaña">Montaña</option>
+      <option value="ciudad">Ciudad</option>
+    </select>
+    <textarea placeholder="Descripción" [(ngModel)]="destinoActual.descripcion"></textarea>
+    <input type="text" placeholder="URL de imagen" [(ngModel)]="destinoActual.imagen" />
+    <input type="number" placeholder="Precio" [(ngModel)]="destinoActual.precio" />
+    <div class="formulario-botones">
+      <button (click)="guardarDestino()">Guardar</button>
+      <button (click)="mostrarFormulario = false">Cancelar</button>
+    </div>
+  </div>
+
+  <table class="tabla-destinos">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>País</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let destino of destinos">
+        <td>{{ destino.nombre }}</td>
+        <td>{{ destino.pais }}</td>
+        <td>{{ destino.categoria }}</td>
+        <td>{{ destino.precio }}€</td>
+        <td>
+          <button (click)="editarDestino(destino)">Editar</button>
+          <button class="btn-eliminar" (click)="eliminarDestino(destino.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
