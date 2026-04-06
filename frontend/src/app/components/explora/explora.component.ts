@@ -1,19 +1,42 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DestinoService } from '../../services/destino.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-explora',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './explora.component.html',
   styleUrl: './explora.component.css'
 })
-export class ExploraComponent {
-  activeCategory = 'playa';
+export class ExploraComponent implements OnInit {
+  destinos: any[] = [];
+  destinosFiltrados: any[] = [];
+  categoriaActiva: string = 'todos';
 
-  public setCategory(categoria: string): void {
-    this.activeCategory = categoria;
+  constructor(private destinoService: DestinoService) {}
+
+  ngOnInit() {
+    this.cargarDestinos();
   }
 
-  public isVisible(categoria: string): boolean {
-    return this.activeCategory === categoria;
+  cargarDestinos() {
+    this.destinoService.getDestinos().subscribe({
+      next: (res) => {
+        this.destinos = res;
+        this.destinosFiltrados = res;
+      },
+      error: () => console.error('Error al cargar destinos')
+    });
+  }
+
+  filtrarPorCategoria(categoria: string) {
+    this.categoriaActiva = categoria;
+    if (categoria === 'todos') {
+      this.destinosFiltrados = this.destinos;
+    } else {
+      this.destinosFiltrados = this.destinos.filter(d => d.categoria === categoria);
+    }
   }
 }

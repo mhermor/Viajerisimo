@@ -1,7 +1,28 @@
 <section class="busqueda">
   <h2>Buscar destinos</h2>
-  <form>
-    <input type="text" id="destino" placeholder="¿A dónde quieres ir?" />
-    <button type="submit">Buscar</button>
-  </form>
+  <div class="busqueda-form">
+    <input
+      type="text"
+      placeholder="¿A dónde quieres ir?"
+      [(ngModel)]="termino"
+      (keyup.enter)="buscar()"
+    />
+    <button (click)="buscar()">Buscar</button>
+  </div>
+
+  <div class="resultados" *ngIf="buscado">
+    <p *ngIf="resultados.length === 0">No se encontraron destinos para "{{ termino }}".</p>
+    <div class="destinos-grid">
+      <div class="card" *ngFor="let destino of resultados" [routerLink]="['/destino', destino.id]">
+        <img [src]="destino.imagen" [alt]="destino.nombre">
+        <div class="card-overlay">
+          <div class="card-content">
+            <h3>{{ destino.nombre }}, {{ destino.pais }}</h3>
+            <p>{{ destino.descripcion }}</p>
+            <p class="precio">Desde {{ destino.precio }}€</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>

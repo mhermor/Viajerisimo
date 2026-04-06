@@ -1,0 +1,46 @@
+<div class="detalle-container" *ngIf="destino">
+  <img [src]="destino.imagen" [alt]="destino.nombre" class="detalle-imagen">
+
+  <div class="detalle-info">
+    <h1>{{ destino.nombre }}, {{ destino.pais }}</h1>
+    <p class="categoria">{{ destino.categoria }}</p>
+    <p class="descripcion">{{ destino.descripcion }}</p>
+    <p class="precio">Desde <strong>{{ destino.precio }}€</strong></p>
+  </div>
+
+  <div class="detalle-acciones" *ngIf="estaLogueado()">
+    <div class="reserva-form">
+      <h3>Reservar este destino</h3>
+      <label>Fecha de inicio</label>
+      <input type="date" [(ngModel)]="fechaInicio" />
+      <label>Fecha de fin</label>
+      <input type="date" [(ngModel)]="fechaFin" />
+      <button (click)="hacerReserva()">Reservar</button>
+    </div>
+
+    <div class="resena-form">
+      <h3>Dejar una reseña</h3>
+      <label>Puntuación (1-5)</label>
+      <input type="number" [(ngModel)]="puntuacion" min="1" max="5" />
+      <label>Comentario</label>
+      <textarea [(ngModel)]="comentario" placeholder="Escribe tu experiencia..."></textarea>
+      <button (click)="dejarResena()">Publicar reseña</button>
+    </div>
+  </div>
+
+  <p *ngIf="!estaLogueado()" class="aviso">
+    <a routerLink="/usuario">Inicia sesión</a> para reservar o dejar una reseña.
+  </p>
+
+  <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+
+  <div class="resenas">
+    <h3>Reseñas ({{ resenas.length }})</h3>
+    <p *ngIf="resenas.length === 0">Todavía no hay reseñas para este destino.</p>
+    <div class="resena" *ngFor="let resena of resenas">
+      <strong>{{ resena.usuario.nombre }}</strong>
+      <span class="puntuacion">⭐ {{ resena.puntuacion }}/5</span>
+      <p>{{ resena.comentario }}</p>
+    </div>
+  </div>
+</div>
