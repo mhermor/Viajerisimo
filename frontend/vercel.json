@@ -1,17 +1,12 @@
 {
-  "builds": [
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/frontend/browser",
+  "installCommand": "npm install",
+  "devCommand": "ng serve --port $PORT",
+  "rewrites": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist/frontend"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
