@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ResenaService {
-  private apiUrl = 'http://localhost:3000/api/resenas';
+  private apiUrl = '${environment.apiUrl}/resenas';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
