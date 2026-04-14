@@ -1,13 +1,17 @@
 {
-  "buildCommand": "npm install && npx ng build --configuration=production",
-  "outputDirectory": "dist/frontend",
-  "devCommand": "ng serve",
-  "installCommand": "npm install",
-  "framework": null,
-  "rewrites": [
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/frontend"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
