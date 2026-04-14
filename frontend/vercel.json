@@ -1,4 +1,9 @@
 {
+  "buildCommand": "npm install && npx ng build --configuration=production",
+  "outputDirectory": "dist/frontend",
+  "devCommand": "ng serve",
+  "installCommand": "npm install",
+  "framework": null,
   "rewrites": [
     {
       "source": "/(.*)",
