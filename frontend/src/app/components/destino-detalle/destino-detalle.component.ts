@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DestinoService } from '../../services/destino.service';
@@ -29,22 +29,19 @@ export class DestinoDetalleComponent implements OnInit {
     private destinoService: DestinoService,
     private reservaService: ReservaService,
     private resenaService: ResenaService,
-    private authService: AuthService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      const id = this.route.snapshot.paramMap.get('id');
-      if (id) {
-        this.destinoService.getDestino(parseInt(id)).subscribe({
-          next: (res) => {
-            this.destino = res;
-            this.resenas = res.resenas || [];
-          },
-          error: () => this.router.navigate(['/'])
-        });
-      }
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.destinoService.getDestino(parseInt(id)).subscribe({
+        next: (res) => {
+          this.destino = res;
+          this.resenas = res.resenas || [];
+        },
+        error: () => this.router.navigate(['/'])
+      });
     }
   }
 
