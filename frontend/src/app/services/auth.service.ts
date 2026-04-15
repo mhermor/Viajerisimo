@@ -1,15 +1,21 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { isPlatformBrowser } from '@angular/common';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
+
+  private isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
 
   registro(datos: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/registro`, datos);
@@ -20,30 +26,34 @@ export class AuthService {
   }
 
   guardarToken(token: string, nombre: string, rol: string) {
-    localStorage.setItem('token', token);
-    localStorage.setItem('nombre', nombre);
-    localStorage.setItem('rol', rol);
+    if (this.isBrowser()) {
+      localStorage.setItem('token', token);
+      localStorage.setItem('nombre', nombre);
+      localStorage.setItem('rol', rol);
+    }
   }
 
   cerrarSesion() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('nombre');
-    localStorage.removeItem('rol');
+    if (this.isBrowser()) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('nombre');
+      localStorage.removeItem('rol');
+    }
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return this.isBrowser() ? localStorage.getItem('token') : null;
   }
 
   getNombre(): string | null {
-    return localStorage.getItem('nombre');
+    return this.isBrowser() ? localStorage.getItem('nombre') : null;
   }
 
   getRol(): string | null {
-    return localStorage.getItem('rol');
+    return this.isBrowser() ? localStorage.getItem('rol') : null;
   }
 
   estaLogueado(): boolean {
-    return !!localStorage.getItem('token');
+    return this.isBrowser() && !!localStorage.getItem('token');
   }
 }

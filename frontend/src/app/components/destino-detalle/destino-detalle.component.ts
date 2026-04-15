@@ -33,15 +33,17 @@ export class DestinoDetalleComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.destinoService.getDestino(parseInt(id)).subscribe({
-        next: (res) => {
-          this.destino = res;
-          this.resenas = res.resenas || [];
-        },
-        error: () => this.router.navigate(['/'])
-      });
+    if (isPlatformBrowser(this.platformId)) {
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id) {
+        this.destinoService.getDestino(parseInt(id)).subscribe({
+          next: (res) => {
+            this.destino = res;
+            this.resenas = res.resenas || [];
+          },
+          error: () => this.router.navigate(['/'])
+        });
+      }
     }
   }
 

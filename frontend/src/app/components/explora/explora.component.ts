@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DestinoService } from '../../services/destino.service';
 import { RouterModule } from '@angular/router';
 
@@ -15,10 +15,15 @@ export class ExploraComponent implements OnInit {
   destinosFiltrados: any[] = [];
   categoriaActiva: string = 'todos';
 
-  constructor(private destinoService: DestinoService) {}
+  constructor(
+    private destinoService: DestinoService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit() {
-    this.cargarDestinos();
+    if (isPlatformBrowser(this.platformId)) {
+      this.cargarDestinos();
+    }
   }
 
   cargarDestinos() {
