@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd frontend && npm install && npm run build --configuration=production --no-ssr",
+  "buildCommand": "cd frontend && npm install && npm run build -- --no-ssr",
   "outputDirectory": "frontend/dist/viajerisimo/browser",
   "installCommand": "echo 'skip root install'",
   "framework": null,
