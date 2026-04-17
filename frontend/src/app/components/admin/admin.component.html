@@ -1,49 +1,229 @@
 <div class="admin-container">
-  <h1>Panel de Administración</h1>
-  <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
-
-  <button class="btn-nuevo" (click)="nuevoDestino()">+ Añadir destino</button>
-
-  <div class="formulario" *ngIf="mostrarFormulario">
-    <h2>{{ editando ? 'Editar destino' : 'Nuevo destino' }}</h2>
-    <input type="text" placeholder="Nombre" [(ngModel)]="destinoActual.nombre" />
-    <input type="text" placeholder="País" [(ngModel)]="destinoActual.pais" />
-    <select [(ngModel)]="destinoActual.categoria">
-      <option value="">Selecciona categoría</option>
-      <option value="playa">Playa</option>
-      <option value="montaña">Montaña</option>
-      <option value="ciudad">Ciudad</option>
-    </select>
-    <textarea placeholder="Descripción" [(ngModel)]="destinoActual.descripcion"></textarea>
-    <input type="text" placeholder="URL de imagen" [(ngModel)]="destinoActual.imagen" />
-    <input type="number" placeholder="Precio" [(ngModel)]="destinoActual.precio" />
-    <div class="formulario-botones">
-      <button (click)="guardarDestino()">Guardar</button>
-      <button (click)="mostrarFormulario = false">Cancelar</button>
+  <h1>🔧 Panel de Administración</h1>
+  
+  <!-- DASHBOARD CON ESTADÍSTICAS -->
+  <div class="dashboard">
+    <div class="stat-card">
+      <div class="stat-icon">📍</div>
+      <div class="stat-info">
+        <h3>{{ estadisticas.totalDestinos }}</h3>
+        <p>Destinos</p>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon">📅</div>
+      <div class="stat-info">
+        <h3>{{ estadisticas.totalReservas }}</h3>
+        <p>Reservas</p>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <div class="stat-info">
+        <h3>{{ estadisticas.totalUsuarios }}</h3>
+        <p>Usuarios</p>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-info">
+        <h3>{{ estadisticas.ingresosTotal }}€</h3>
+        <p>Ingresos Totales</p>
+      </div>
     </div>
   </div>
 
-  <table class="tabla-destinos">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>País</th>
-        <th>Categoría</th>
-        <th>Precio</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let destino of destinos">
-        <td>{{ destino.nombre }}</td>
-        <td>{{ destino.pais }}</td>
-        <td>{{ destino.categoria }}</td>
-        <td>{{ destino.precio }}€</td>
-        <td>
-          <button (click)="editarDestino(destino)">Editar</button>
-          <button class="btn-eliminar" (click)="eliminarDestino(destino.id)">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- MENSAJE DE FEEDBACK -->
+  <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+
+  <!-- SISTEMA DE PESTAÑAS -->
+  <div class="tabs">
+    <button 
+      [class.active]="tabActiva === 'destinos'" 
+      (click)="cambiarTab('destinos')">
+      📍 Destinos
+    </button>
+    <button 
+      [class.active]="tabActiva === 'reservas'" 
+      (click)="cambiarTab('reservas')">
+      📅 Reservas
+    </button>
+    <button 
+      [class.active]="tabActiva === 'usuarios'" 
+      (click)="cambiarTab('usuarios')">
+      👥 Usuarios
+    </button>
+  </div>
+
+  <!-- ============== TAB: DESTINOS ============== -->
+  <div *ngIf="tabActiva === 'destinos'" class="tab-content">
+    <div class="tab-header">
+      <input 
+        type="text" 
+        placeholder="🔍 Buscar destino..." 
+        [(ngModel)]="busquedaDestino"
+        (ngModelChange)="filtrarDestinos()"
+        class="search-input"
+      />
+      <button class="btn-nuevo" (click)="nuevoDestino()">+ Añadir destino</button>
+    </div>
+
+    <!-- Formulario de crear/editar destino -->
+    <div class="formulario" *ngIf="mostrarFormulario">
+      <h2>{{ editando ? 'Editar destino' : 'Nuevo destino' }}</h2>
+      <input type="text" placeholder="Nombre" [(ngModel)]="destinoActual.nombre" />
+      <input type="text" placeholder="País" [(ngModel)]="destinoActual.pais" />
+      <select [(ngModel)]="destinoActual.categoria">
+        <option value="">Selecciona categoría</option>
+        <option value="playa">Playa</option>
+        <option value="montaña">Montaña</option>
+        <option value="ciudad">Ciudad</option>
+      </select>
+      <textarea placeholder="Descripción" [(ngModel)]="destinoActual.descripcion"></textarea>
+      <input type="text" placeholder="URL de imagen" [(ngModel)]="destinoActual.imagen" />
+      <input type="number" placeholder="Precio" [(ngModel)]="destinoActual.precio" />
+      <div class="formulario-botones">
+        <button (click)="guardarDestino()">Guardar</button>
+        <button (click)="mostrarFormulario = false">Cancelar</button>
+      </div>
+    </div>
+
+    <!-- Tabla de destinos -->
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>País</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let destino of destinosFiltrados">
+          <td>{{ destino.nombre }}</td>
+          <td>{{ destino.pais }}</td>
+          <td><span class="badge">{{ destino.categoria }}</span></td>
+          <td>{{ destino.precio }}€</td>
+          <td>
+            <button class="btn-edit" (click)="editarDestino(destino)">✏️</button>
+            <button class="btn-eliminar" (click)="eliminarDestino(destino.id)">🗑️</button>
+          </td>
+        </tr>
+        <tr *ngIf="destinosFiltrados.length === 0">
+          <td colspan="5" style="text-align: center; padding: 2rem;">
+            No se encontraron destinos
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============== TAB: RESERVAS ============== -->
+  <div *ngIf="tabActiva === 'reservas'" class="tab-content">
+    <div class="tab-header">
+      <select [(ngModel)]="filtroEstadoReserva" (ngModelChange)="filtrarReservasPorEstado()" class="filter-select">
+        <option value="">Todas las reservas</option>
+        <option value="pendiente">Pendientes</option>
+        <option value="confirmada">Confirmadas</option>
+        <option value="completada">Completadas</option>
+        <option value="cancelada">Canceladas</option>
+      </select>
+      <span class="count-badge">Total: {{ reservas.length }}</span>
+    </div>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Destino</th>
+          <th>Fechas</th>
+          <th>Personas</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reserva of reservas">
+          <td>
+            <strong>{{ reserva.usuario.nombre }}</strong><br>
+            <small>{{ reserva.usuario.email }}</small>
+          </td>
+          <td>{{ reserva.destino.nombre }}, {{ reserva.destino.pais }}</td>
+          <td>
+            {{ reserva.fechaInicio | date:'dd/MM/yy' }} - 
+            {{ reserva.fechaFin | date:'dd/MM/yy' }}
+          </td>
+          <td>{{ reserva.numPersonas || 1 }}</td>
+          <td><strong>{{ reserva.precioTotal }}€</strong></td>
+          <td>
+            <span class="badge badge-{{ reserva.estado }}">
+              {{ reserva.estado }}
+            </span>
+          </td>
+          <td>
+            <select 
+              *ngIf="reserva.estado !== 'completada' && reserva.estado !== 'cancelada'"
+              (change)="cambiarEstadoReserva(reserva, $any($event.target).value)"
+              class="estado-select">
+              <option value="">Cambiar estado</option>
+              <option value="confirmada" *ngIf="reserva.estado === 'pendiente'">Confirmar</option>
+              <option value="completada" *ngIf="reserva.estado === 'confirmada'">Completar</option>
+              <option value="cancelada">Cancelar</option>
+            </select>
+            <span *ngIf="reserva.estado === 'completada' || reserva.estado === 'cancelada'">
+              -
+            </span>
+          </td>
+        </tr>
+        <tr *ngIf="reservas.length === 0">
+          <td colspan="7" style="text-align: center; padding: 2rem;">
+            No hay reservas para mostrar
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============== TAB: USUARIOS ============== -->
+  <div *ngIf="tabActiva === 'usuarios'" class="tab-content">
+    <div class="tab-header">
+      <span class="count-badge">Total usuarios: {{ usuarios.length }}</span>
+    </div>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Reservas</th>
+          <th>Fecha registro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios">
+          <td><strong>{{ usuario.nombre }}</strong></td>
+          <td>{{ usuario.email }}</td>
+          <td>
+            <span class="badge badge-{{ usuario.rol }}">
+              {{ usuario.rol }}
+            </span>
+          </td>
+          <td>{{ usuario._count.reservas }}</td>
+          <td>{{ usuario.creadoEn | date:'dd/MM/yyyy' }}</td>
+        </tr>
+        <tr *ngIf="usuarios.length === 0">
+          <td colspan="5" style="text-align: center; padding: 2rem;">
+            No hay usuarios registrados
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
 </div>

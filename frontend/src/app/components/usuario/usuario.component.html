@@ -27,7 +27,15 @@
   <div *ngIf="estaLogueado()" class="perfil-container">
     <h2>¡Bienvenido, {{ getNombre() }}!</h2>
 
-    <div class="seccion">
+    <!-- PANEL ADMIN - Solo si es admin -->
+    <div *ngIf="esAdmin()" class="seccion">
+      <h3>🔧 Panel de Administración</h3>
+      <p>Puedes gestionar los destinos desde aquí:</p>
+      <a href="/admin" class="btn-admin">Ir al Panel Admin</a>
+    </div>
+
+    <!-- MIS RESERVAS - Solo si NO es admin (usuarios normales) -->
+    <div *ngIf="!esAdmin()" class="seccion">
       <h3>📅 Mis Reservas</h3>
       <p *ngIf="reservas.length === 0">No tienes reservas todavía.</p>
       <table *ngIf="reservas.length > 0">

@@ -1,0 +1,370 @@
+.admin-container {
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2B7A78;
+}
+
+/* ============== DASHBOARD ESTADÍSTICAS ============== */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #2B7A78 0%, #3AAFA9 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 4px 12px rgba(43, 122, 120, 0.2);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-icon {
+  font-size: 3rem;
+}
+
+.stat-info h3 {
+  font-size: 2rem;
+  margin: 0;
+  font-weight: bold;
+}
+
+.stat-info p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+/* ============== SISTEMA DE PESTAÑAS ============== */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.tabs button {
+  padding: 1rem 2rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #666;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s;
+}
+
+.tabs button:hover {
+  color: #2B7A78;
+  background-color: #f5f5f5;
+}
+
+.tabs button.active {
+  color: #2B7A78;
+  border-bottom-color: #2B7A78;
+  font-weight: 600;
+}
+
+/* ============== CONTENIDO DE PESTAÑAS ============== */
+.tab-content {
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 250px;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #2B7A78;
+}
+
+.filter-select, .estado-select {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.filter-select:focus, .estado-select:focus {
+  outline: none;
+  border-color: #2B7A78;
+}
+
+.count-badge {
+  background-color: #2B7A78;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* ============== BOTONES ============== */
+.btn-nuevo {
+  padding: 0.75rem 1.5rem;
+  background-color: #2B7A78;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.btn-nuevo:hover {
+  background-color: #1f5a58;
+}
+
+.btn-edit {
+  padding: 0.5rem 0.75rem;
+  background-color: #3AAFA9;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.btn-edit:hover {
+  background-color: #2a8f89;
+}
+
+.btn-eliminar {
+  padding: 0.5rem 0.75rem;
+  background-color: #D9534F;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-eliminar:hover {
+  background-color: #c9302c;
+}
+
+/* ============== FORMULARIO ============== */
+.formulario {
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border: 2px solid #e0e0e0;
+}
+
+.formulario h2 {
+  margin-top: 0;
+  color: #2B7A78;
+}
+
+.formulario input,
+.formulario textarea,
+.formulario select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.formulario textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.formulario-botones {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.formulario-botones button {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.formulario-botones button:first-child {
+  background-color: #2B7A78;
+  color: white;
+}
+
+.formulario-botones button:first-child:hover {
+  background-color: #1f5a58;
+}
+
+.formulario-botones button:last-child {
+  background-color: #999;
+  color: white;
+}
+
+.formulario-botones button:last-child:hover {
+  background-color: #777;
+}
+
+/* ============== TABLAS ============== */
+.tabla {
+  width: 100%;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-collapse: collapse;
+}
+
+.tabla thead {
+  background-color: #2B7A78;
+  color: white;
+}
+
+.tabla th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.tabla td {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tabla tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.tabla tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ============== BADGES ============== */
+.badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badge {
+  background-color: #3AAFA9;
+  color: white;
+}
+
+.badge-pendiente {
+  background-color: #FFC107;
+  color: #333;
+}
+
+.badge-confirmada {
+  background-color: #2196F3;
+  color: white;
+}
+
+.badge-completada {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.badge-cancelada {
+  background-color: #999;
+  color: white;
+}
+
+.badge-admin {
+  background-color: #9C27B0;
+  color: white;
+}
+
+.badge-usuario {
+  background-color: #607D8B;
+  color: white;
+}
+
+/* ============== MENSAJE ============== */
+.mensaje {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #c3e6cb;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* ============== RESPONSIVE ============== */
+@media (max-width: 768px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs {
+    flex-direction: column;
+  }
+
+  .tabs button {
+    text-align: left;
+  }
+
+  .tab-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input {
+    min-width: 100%;
+  }
+
+  .tabla {
+    font-size: 0.85rem;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: 0.75rem 0.5rem;
+  }
+}

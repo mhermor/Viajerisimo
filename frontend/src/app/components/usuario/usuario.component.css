@@ -28,6 +28,22 @@ button.logout {
   background-color: #D9534F;
 }
 
+.btn-admin {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  background-color: #2B7A78;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.btn-admin:hover {
+  background-color: #1f5a58;
+}
+
 .perfil-info p {
   margin: 0.5rem 0;
 }
@@ -69,4 +85,3 @@ button.logout {
     border-radius: 20px;
     font-size: 0.85rem;
   }
-  

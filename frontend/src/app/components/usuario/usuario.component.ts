@@ -36,6 +36,10 @@ export class UsuarioComponent {
     return this.authService.getNombre() || '';
   }
 
+  esAdmin(): boolean {
+    return this.authService.getRol() === 'admin';
+  }
+
   login() {
     this.authService.login({ email: this.email, password: this.password }).subscribe({
       next: (res) => {

@@ -13,7 +13,7 @@ html, body {
   flex: 1;
   padding: 1rem;
   padding-top: 100px;
-  background-image: url('/assets/360_F_508045046_yUCqrQUoUMN5KUCTcNoL3LxrecOc1q2b.jpg');
+  background-image: url('https://plus.unsplash.com/premium_photo-1701683217422-ffb7785557c5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODV8fGJsdWUlMjBiYWNrZ3JvdW5kfGVufDB8MHwwfHx8MA%3D%3D');
   background-size: cover;
   background-position: center;
   box-sizing: border-box;
