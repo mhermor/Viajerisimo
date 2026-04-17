@@ -13,14 +13,28 @@ const getReservas = async (req, res) => {
 }
 
 const crearReserva = async (req, res) => {
-  const { destinoId, fechaInicio, fechaFin } = req.body
+  const { destinoId, fechaInicio, fechaFin, numPersonas = 1 } = req.body
   try {
+    // Obtener el destino para calcular el precio
+    const destino = await prisma.destino.findUnique({
+      where: { id: parseInt(destinoId) }
+    })
+    if (!destino) return res.status(404).json({ error: 'Destino no encontrado' })
+
+    // Calcular número de días y precio total
+    const inicio = new Date(fechaInicio)
+    const fin = new Date(fechaFin)
+    const dias = Math.ceil((fin - inicio) / (1000 * 60 * 60 * 24))
+    const precioTotal = destino.precio * dias * numPersonas
+
     const reserva = await prisma.reserva.create({
       data: {
         usuarioId: req.usuario.id,
         destinoId: parseInt(destinoId),
-        fechaInicio: new Date(fechaInicio),
-        fechaFin: new Date(fechaFin)
+        fechaInicio: inicio,
+        fechaFin: fin,
+        numPersonas: parseInt(numPersonas),
+        precioTotal: precioTotal
       }
     })
     res.json(reserva)

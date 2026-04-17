@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes')
 const destinoRoutes = require('./routes/destinoRoutes')
 const reservaRoutes = require('./routes/reservaRoutes')
 const resenaRoutes = require('./routes/resenaRoutes')
+const adminRoutes = require('./routes/adminRoutes')
 
 const app = express()
 app.use(cors())
@@ -19,6 +20,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/destinos', destinoRoutes)
 app.use('/api/reservas', reservaRoutes)
 app.use('/api/resenas', resenaRoutes)
+app.use('/api/admin', adminRoutes)
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {

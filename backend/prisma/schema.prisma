@@ -34,18 +34,22 @@ model Destino {
   creadoEn    DateTime    @default(now())
   reservas    Reserva[]
   resenas     Resena[]
+
+  @@unique([nombre, pais], name: "nombre_pais")
 }
 
 model Reserva {
-  id          Int       @id @default(autoincrement())
-  usuarioId   Int
-  destinoId   Int
-  fechaInicio DateTime
-  fechaFin    DateTime
-  estado      String    @default("pendiente")
-  creadoEn    DateTime  @default(now())
-  usuario     Usuario   @relation(fields: [usuarioId], references: [id])
-  destino     Destino   @relation(fields: [destinoId], references: [id])
+  id           Int       @id @default(autoincrement())
+  usuarioId    Int
+  destinoId    Int
+  fechaInicio  DateTime
+  fechaFin     DateTime
+  numPersonas  Int       @default(1)
+  precioTotal  Float?
+  estado       String    @default("pendiente")
+  creadoEn     DateTime  @default(now())
+  usuario      Usuario   @relation(fields: [usuarioId], references: [id])
+  destino      Destino   @relation(fields: [destinoId], references: [id])
 }
 
 model Resena {
