@@ -11,11 +11,10 @@ html, body {
 
 .main-content {
   flex: 1;
-  padding: 1rem;
-  padding-top: 100px;
+  padding-top: 65px;
   background-image: url('https://plus.unsplash.com/premium_photo-1701683217422-ffb7785557c5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODV8fGJsdWUlMjBiYWNrZ3JvdW5kfGVufDB8MHwwfHx8MA%3D%3D');
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
   box-sizing: border-box;
 }
-

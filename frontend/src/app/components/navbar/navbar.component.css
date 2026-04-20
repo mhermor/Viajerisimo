@@ -9,9 +9,10 @@
   font-size: 1.4rem;
   font-family: 'Sour Gummy', cursive;
   font-weight: bold;
-  color: #2B7A78;
+  color: white;
   gap: 0.4rem;
   pointer-events: none;
+  transition: opacity 0.25s;
 }
 
 /* ===== HAMBURGUESA ===== */
@@ -20,9 +21,8 @@
   top: 1rem;
   left: 1rem;
   z-index: 1002;
-  background: white;
+  background: transparent;
   border: none;
-  border-radius: 8px;
   width: 38px;
   height: 38px;
   cursor: pointer;
@@ -32,22 +32,21 @@
   justify-content: center;
   gap: 5px;
   padding: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  transition: box-shadow 0.2s;
-}
-
-.hamburger:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  transition: opacity 0.2s;
 }
 
 .hamburger span {
   display: block;
   width: 20px;
   height: 2px;
-  background: #2B7A78;
+  background: white;
   border-radius: 2px;
   transition: all 0.3s ease;
   transform-origin: center;
+}
+
+.hamburger:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
 }
 
 /* Animación a X cuando está abierto */
