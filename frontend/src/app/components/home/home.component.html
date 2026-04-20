@@ -1,6 +1,121 @@
-<div class="home">
-  <div class="overlay">
-    <h1>Bienvenido a Viajerisimo</h1>
-    <p>Descubre tu próximo destino y comienza a planificar tu viaje hoy mismo.</p>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">✈️ Tu próxima aventura te espera</p>
+    <h1>Descubre el mundo<br>con <span class="brand-name">Viajerísimo</span></h1>
+    <p class="hero-sub">Explora destinos únicos, reserva con facilidad y vive experiencias que nunca olvidarás.</p>
+    <div class="hero-actions">
+      <a href="/destinos" class="btn-primary">Explorar destinos</a>
+      <a href="/about" class="btn-secondary">Sobre nosotros</a>
+    </div>
   </div>
-</div>
+  <div class="hero-scroll">
+    <span>↓</span>
+  </div>
+</section>
+
+<!-- CATEGORÍAS -->
+<section class="categorias">
+  <div class="section-inner">
+    <h2 class="section-title">¿A dónde quieres ir?</h2>
+    <p class="section-sub">Elige tu tipo de escapada favorita</p>
+    <div class="categorias-grid">
+      <a href="/destinos?categoria=playa" class="categoria-card playa">
+        <div class="categoria-overlay">
+          <span class="categoria-icon">🏖️</span>
+          <h3>Playas</h3>
+          <p>Arena, sol y mar</p>
+        </div>
+      </a>
+      <a href="/destinos?categoria=montaña" class="categoria-card montana">
+        <div class="categoria-overlay">
+          <span class="categoria-icon">🏔️</span>
+          <h3>Montañas</h3>
+          <p>Naturaleza y aventura</p>
+        </div>
+      </a>
+      <a href="/destinos?categoria=ciudad" class="categoria-card ciudad">
+        <div class="categoria-overlay">
+          <span class="categoria-icon">🏙️</span>
+          <h3>Ciudades</h3>
+          <p>Cultura y gastronomía</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINOS DESTACADOS -->
+<section class="destacados">
+  <div class="section-inner">
+    <h2 class="section-title">Destinos más populares</h2>
+    <p class="section-sub">Los favoritos de nuestra comunidad de viajeros</p>
+
+    <div *ngIf="cargando" class="loading-grid">
+      <div class="skeleton" *ngFor="let i of [1,2,3,4,5,6]"></div>
+    </div>
+
+    <div class="destinos-grid" *ngIf="!cargando">
+      <a class="destino-card" *ngFor="let d of destinosDestacados" [href]="'/destino/' + d.id">
+        <div class="card-img-wrapper">
+          <img [src]="d.imagen" [alt]="d.nombre" loading="lazy">
+          <span class="card-categoria">{{ d.categoria }}</span>
+        </div>
+        <div class="card-body">
+          <h3>{{ d.nombre }}</h3>
+          <p class="card-pais">📍 {{ d.pais }}</p>
+          <div class="card-footer">
+            <span class="card-precio">Desde <strong>{{ d.precio }}€</strong>/día</span>
+            <span class="card-cta">Ver más →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="ver-todos">
+      <a href="/destinos" class="btn-outline">Ver todos los destinos</a>
+    </div>
+  </div>
+</section>
+
+<!-- POR QUÉ VIAJERISIMO -->
+<section class="features">
+  <div class="section-inner">
+    <h2 class="section-title">¿Por qué Viajerísimo?</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <span class="feature-icon">🔍</span>
+        <h3>Fácil de explorar</h3>
+        <p>Filtra por categoría, busca por nombre o país y encuentra tu destino perfecto en segundos.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">📅</span>
+        <h3>Reserva sin complicaciones</h3>
+        <p>Selecciona fechas, número de personas y conoce el precio total al instante antes de confirmar.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">⭐</span>
+        <h3>Opiniones reales</h3>
+        <p>Lee las experiencias de otros viajeros y comparte la tuya para ayudar a la comunidad.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🔒</span>
+        <h3>100% seguro</h3>
+        <p>Tus datos están protegidos con autenticación JWT y encriptación de contraseñas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta">
+  <div class="section-inner">
+    <h2>¿Listo para tu próxima aventura?</h2>
+    <p>Únete a nuestra comunidad de viajeros y empieza a planificar hoy.</p>
+    <div class="cta-actions">
+      <a href="/usuario" class="btn-primary">Crear cuenta gratis</a>
+      <a href="/destinos" class="btn-ghost">Ver destinos</a>
+    </div>
+  </div>
+</section>

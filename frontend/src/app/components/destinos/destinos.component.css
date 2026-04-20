@@ -1,0 +1,232 @@
+.destinos-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* CABECERA */
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.page-header p {
+  color: #95a5a6;
+  font-size: 0.95rem;
+}
+
+/* FILTROS */
+.filtros {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.buscador {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  font-size: 1rem;
+}
+
+.buscador input {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.buscador input:focus {
+  border-color: #2B7A78;
+  box-shadow: 0 0 0 3px rgba(43,122,120,0.1);
+}
+
+.clear-btn {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: #95a5a6;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+}
+
+/* TABS */
+.categoria-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.categoria-tabs button {
+  padding: 0.5rem 1.1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 50px;
+  background: white;
+  color: #555;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.categoria-tabs button:hover {
+  border-color: #2B7A78;
+  color: #2B7A78;
+}
+
+.categoria-tabs button.active {
+  background: #2B7A78;
+  color: white;
+  border-color: #2B7A78;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 1000px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 700px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 460px)  { .grid { grid-template-columns: 1fr; } }
+
+/* CARD */
+.card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: transform 0.25s, box-shadow 0.25s;
+  display: block;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.11);
+}
+
+.card-img {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+}
+
+.card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.card:hover .card-img img {
+  transform: scale(1.06);
+}
+
+.card-cat {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  background: #2B7A78;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.18rem 0.55rem;
+  border-radius: 10px;
+  text-transform: capitalize;
+}
+
+.card-body {
+  padding: 0.9rem 1rem;
+}
+
+.card-body h3 {
+  font-size: 0.95rem;
+  color: #2c3e50;
+  margin-bottom: 0.2rem;
+  font-weight: 700;
+}
+
+.card-pais {
+  font-size: 0.78rem;
+  color: #95a5a6;
+  margin-bottom: 0.4rem;
+}
+
+.card-desc {
+  font-size: 0.8rem;
+  color: #7f8c8d;
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-precio {
+  font-size: 0.82rem;
+  color: #555;
+}
+
+.card-precio strong {
+  color: #2B7A78;
+}
+
+.card-link {
+  font-size: 0.8rem;
+  color: #2B7A78;
+  font-weight: 600;
+}
+
+/* SKELETON */
+.skeleton {
+  height: 260px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* EMPTY */
+.empty {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: #95a5a6;
+}
+
+.empty span { font-size: 3rem; display: block; margin-bottom: 1rem; }
+.empty p { margin-bottom: 1rem; }
+.empty button {
+  padding: 0.6rem 1.5rem;
+  background: #2B7A78;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+}

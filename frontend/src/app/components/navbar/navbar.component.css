@@ -1,37 +1,93 @@
+/* ===== LOGO ===== */
 .logo-fixed {
   position: fixed;
   top: 1rem;
-  left: 3.5rem;
+  left: 3.8rem;
   z-index: 1001;
   display: flex;
   align-items: center;
-  font-size: 1.5rem;
-  font-family: 'Sour Gummy';
+  font-size: 1.4rem;
+  font-family: 'Sour Gummy', cursive;
   font-weight: bold;
-  color: #2a7a64;
+  color: #2B7A78;
   gap: 0.4rem;
+  pointer-events: none;
 }
 
+/* ===== HAMBURGUESA ===== */
 .hamburger {
   position: fixed;
   top: 1rem;
   left: 1rem;
-  z-index: 1001;
-  font-size: 1.5rem;
-  background-blend-mode:lighten;
+  z-index: 1002;
+  background: white;
   border: none;
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  transition: box-shadow 0.2s;
 }
 
+.hamburger:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+}
+
+.hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #2B7A78;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Animación a X cuando está abierto */
+.hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ===== OVERLAY ===== */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.overlay.visible {
+  display: block;
+  opacity: 1;
+}
+
+/* ===== SIDEBAR ===== */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -260px;
+  left: -280px;
   width: 260px;
   height: 100%;
-  background-color: #ffffff;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  padding: 3rem 1.5rem;
+  background: white;
+  box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+  padding: 0;
   transition: left 0.3s ease;
   z-index: 1000;
   display: flex;
@@ -42,18 +98,85 @@
   left: 0;
 }
 
+/* ===== SIDEBAR HEADER ===== */
+.sidebar-header {
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.sidebar-brand {
+  font-family: 'Sour Gummy', cursive;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #2B7A78;
+}
+
+/* ===== LINKS ===== */
 .nav-links {
   list-style: none;
-  padding: 0;
+  padding: 1rem 0;
   margin: 0;
+  flex: 1;
 }
 
 .nav-links li {
-  margin: 1rem 0;
+  margin: 0;
 }
 
 .nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.5rem;
   text-decoration: none;
-  color: #333;
+  color: #444;
   font-weight: 500;
+  font-size: 0.95rem;
+  transition: background 0.15s, color 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.nav-links a:hover {
+  background: #f0f9f8;
+  color: #2B7A78;
+  border-left-color: #2B7A78;
+}
+
+.nav-icon {
+  font-size: 1.1rem;
+  width: 24px;
+  text-align: center;
+}
+
+/* ===== FOOTER SIDEBAR (perfil) ===== */
+.sidebar-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.btn-perfil {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #2B7A78;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.btn-perfil:hover {
+  background: #1f5a58;
+}
+
+.logo-fixed {
+  transition: opacity 0.25s;
+}
+
+.logo-fixed.hidden {
+  opacity: 0;
+  pointer-events: none;
 }

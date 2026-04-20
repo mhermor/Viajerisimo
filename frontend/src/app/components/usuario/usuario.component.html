@@ -1,70 +1,116 @@
 <div class="usuario-container">
 
+  <!-- FORMULARIOS LOGIN/REGISTRO -->
   <div *ngIf="!estaLogueado()">
     <div class="modo-tabs">
       <button [class.active]="modo === 'login'" (click)="modo = 'login'">Iniciar Sesión</button>
       <button [class.active]="modo === 'registro'" (click)="modo = 'registro'">Registrarse</button>
     </div>
 
-    <div *ngIf="modo === 'login'" class="login-container">
+    <div *ngIf="modo === 'login'" class="auth-container">
       <h2>Iniciar Sesión</h2>
       <input type="email" placeholder="Email" [(ngModel)]="email" />
       <input type="password" placeholder="Contraseña" [(ngModel)]="password" />
-      <button (click)="login()">Entrar</button>
-      <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+      <button class="btn-primary" (click)="login()">Entrar</button>
+      <p class="mensaje error" *ngIf="mensaje">{{ mensaje }}</p>
     </div>
 
-    <div *ngIf="modo === 'registro'" class="login-container">
+    <div *ngIf="modo === 'registro'" class="auth-container">
       <h2>Crear cuenta</h2>
       <input type="text" placeholder="Nombre" [(ngModel)]="nombre" />
       <input type="email" placeholder="Email" [(ngModel)]="email" />
       <input type="password" placeholder="Contraseña" [(ngModel)]="password" />
-      <button (click)="registro()">Registrarse</button>
-      <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+      <button class="btn-primary" (click)="registro()">Registrarse</button>
+      <p class="mensaje" [class.error]="mensaje.includes('Error')" *ngIf="mensaje">{{ mensaje }}</p>
     </div>
   </div>
 
+  <!-- PANEL DE USUARIO LOGUEADO -->
   <div *ngIf="estaLogueado()" class="perfil-container">
-    <h2>¡Bienvenido, {{ getNombre() }}!</h2>
 
-    <!-- PANEL ADMIN - Solo si es admin -->
-    <div *ngIf="esAdmin()" class="seccion">
+    <!-- CABECERA PERFIL -->
+    <div class="perfil-header">
+      <div class="avatar">{{ getNombre().charAt(0).toUpperCase() }}</div>
+      <div class="perfil-info">
+        <h2>¡Bienvenido, {{ getNombre() }}!</h2>
+        <span class="rol-badge" [class.admin]="esAdmin()">
+          {{ esAdmin() ? '⚙️ Administrador' : '✈️ Viajero' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- PANEL ADMIN -->
+    <div *ngIf="esAdmin()" class="seccion admin-seccion">
       <h3>🔧 Panel de Administración</h3>
-      <p>Puedes gestionar los destinos desde aquí:</p>
-      <a href="/admin" class="btn-admin">Ir al Panel Admin</a>
+      <p>Gestiona destinos, reservas y usuarios desde el panel de administración.</p>
+      <a href="/admin" class="btn-admin">Ir al Panel Admin →</a>
     </div>
 
-    <!-- MIS RESERVAS - Solo si NO es admin (usuarios normales) -->
+    <!-- MIS RESERVAS (usuarios normales) -->
     <div *ngIf="!esAdmin()" class="seccion">
-      <h3>📅 Mis Reservas</h3>
-      <p *ngIf="reservas.length === 0">No tienes reservas todavía.</p>
-      <table *ngIf="reservas.length > 0">
-        <thead>
-          <tr>
-            <th>Destino</th>
-            <th>Fecha inicio</th>
-            <th>Fecha fin</th>
-            <th>Estado</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let reserva of reservas">
-            <td>{{ reserva.destino.nombre }}</td>
-            <td>{{ reserva.fechaInicio | date:'dd/MM/yyyy' }}</td>
-            <td>{{ reserva.fechaFin | date:'dd/MM/yyyy' }}</td>
-            <td>{{ reserva.estado }}</td>
-            <td>
-              <button *ngIf="reserva.estado === 'pendiente'" (click)="cancelarReserva(reserva.id)">
-                Cancelar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="seccion-header">
+        <h3>📅 Mis Reservas</h3>
+        <span class="contador" *ngIf="reservas.length > 0">
+          {{ reservas.length }} reserva{{ reservas.length !== 1 ? 's' : '' }}
+        </span>
+      </div>
+
+      <!-- Sin reservas -->
+      <div *ngIf="reservas.length === 0" class="empty-state">
+        <span class="empty-icon">🗺️</span>
+        <p>Todavía no tienes reservas.</p>
+        <a href="/explora" class="btn-primary">Explorar destinos</a>
+      </div>
+
+      <!-- Tabla de reservas -->
+      <div *ngIf="reservas.length > 0" class="tabla-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Destino</th>
+              <th>Fechas</th>
+              <th>Personas</th>
+              <th>Precio total</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reserva of reservas">
+              <td class="td-destino">
+                <strong>{{ reserva.destino?.nombre }}</strong>
+                <small>{{ reserva.destino?.pais }}</small>
+              </td>
+              <td class="td-fechas">
+                <span>{{ reserva.fechaInicio | date:'dd/MM/yyyy' }}</span>
+                <small>→ {{ reserva.fechaFin | date:'dd/MM/yyyy' }}</small>
+              </td>
+              <td class="td-center">{{ reserva.numPersonas || 1 }} 👤</td>
+              <td class="td-precio">{{ reserva.precioTotal ? (reserva.precioTotal | number:'1.0-0') + '€' : '-' }}</td>
+              <td>
+                <span class="estado-badge" [ngClass]="reserva.estado">
+                  {{ reserva.estado }}
+                </span>
+              </td>
+              <td>
+                <button
+                  class="btn-cancelar"
+                  *ngIf="reserva.estado === 'pendiente' || reserva.estado === 'confirmada'"
+                  (click)="cancelarReserva(reserva.id)">
+                  Cancelar
+                </button>
+                <span *ngIf="reserva.estado === 'completada'" class="completada-icon">✅</span>
+                <span *ngIf="reserva.estado === 'cancelada'" class="cancelada-icon">❌</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mensaje error" *ngIf="mensaje">{{ mensaje }}</p>
     </div>
 
-    <button class="logout" (click)="logout()">Cerrar Sesión</button>
-  </div>
+    <button class="btn-logout" (click)="logout()">Cerrar Sesión</button>
 
+  </div>
 </div>

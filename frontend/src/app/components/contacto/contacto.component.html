@@ -1,16 +1,96 @@
-<section class="contact-container">
-    <h2>Contáctanos</h2>
-    <form>
-      <label for="name">Nombre:</label>
-      <input id="name" type="text" placeholder="Tu nombre" />
-  
-      <label for="email">Email:</label>
-      <input id="email" type="email" placeholder="tucorreo@example.com" />
-  
-      <label for="message">Mensaje:</label>
-      <textarea id="message" rows="5" placeholder="Escribe tu mensaje..."></textarea>
-  
-      <button type="submit">Enviar</button>
-    </form>
-  </section>
-  
+<div class="contacto-page">
+
+  <div class="contacto-hero">
+    <h1>Contáctanos</h1>
+    <p>¿Tienes alguna pregunta o sugerencia? Estaremos encantados de ayudarte.</p>
+  </div>
+
+  <div class="contacto-inner">
+
+    <!-- INFO -->
+    <div class="contacto-info">
+      <h2>¿En qué podemos ayudarte?</h2>
+      <p>Estamos disponibles para resolver cualquier duda sobre reservas, destinos o el funcionamiento de la plataforma.</p>
+
+      <div class="info-items">
+        <div class="info-item">
+          <span>📧</span>
+          <div>
+            <strong>Email</strong>
+            <p>hola&#64;viajerisimo.com</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <span>⏰</span>
+          <div>
+            <strong>Horario de atención</strong>
+            <p>Lunes a Viernes, 9:00 - 18:00</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <span>📍</span>
+          <div>
+            <strong>Ubicación</strong>
+            <p>Santa Cruz de Tenerife, España</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <span>💬</span>
+          <div>
+            <strong>Tiempo de respuesta</strong>
+            <p>Normalmente en menos de 24 horas</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORMULARIO -->
+    <div class="contacto-form-wrapper">
+      <div *ngIf="!enviado" class="form-card">
+        <h2>Envíanos un mensaje</h2>
+
+        <div class="form-group">
+          <label>Nombre completo *</label>
+          <input type="text" [(ngModel)]="nombre" placeholder="Tu nombre" />
+        </div>
+
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" [(ngModel)]="email" placeholder="tucorreo@ejemplo.com" />
+        </div>
+
+        <div class="form-group">
+          <label>Asunto</label>
+          <select [(ngModel)]="asunto">
+            <option value="">Selecciona un asunto</option>
+            <option>Pregunta sobre reservas</option>
+            <option>Información sobre destinos</option>
+            <option>Problema técnico</option>
+            <option>Sugerencia de mejora</option>
+            <option>Otro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Mensaje *</label>
+          <textarea [(ngModel)]="mensaje" rows="5" placeholder="Escribe tu mensaje aquí..."></textarea>
+        </div>
+
+        <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+
+        <button class="btn-enviar" (click)="enviar()">
+          Enviar mensaje ✉️
+        </button>
+      </div>
+
+      <!-- ÉXITO -->
+      <div *ngIf="enviado" class="exito-card">
+        <span class="exito-icon">✅</span>
+        <h2>¡Mensaje enviado!</h2>
+        <p>Gracias por contactarnos. Te responderemos en menos de 24 horas en <strong>{{ email }}</strong>.</p>
+        <button (click)="reset()">Enviar otro mensaje</button>
+      </div>
+    </div>
+
+  </div>
+</div>

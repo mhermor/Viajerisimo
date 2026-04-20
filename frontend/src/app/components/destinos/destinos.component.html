@@ -1,0 +1,63 @@
+<div class="destinos-page">
+
+  <!-- CABECERA -->
+  <div class="page-header">
+    <h1>Destinos</h1>
+    <p>{{ filtrados.length }} destino{{ filtrados.length !== 1 ? 's' : '' }} disponible{{ filtrados.length !== 1 ? 's' : '' }}</p>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filtros">
+    <!-- Buscador -->
+    <div class="buscador">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        [(ngModel)]="busqueda"
+        (ngModelChange)="aplicarFiltros()"
+        placeholder="Buscar por nombre, país o categoría..."
+      />
+      <button *ngIf="busqueda" class="clear-btn" (click)="busqueda=''; aplicarFiltros()">✕</button>
+    </div>
+
+    <!-- Tabs categoría -->
+    <div class="categoria-tabs">
+      <button [class.active]="categoriaActiva === 'todas'" (click)="setCategoria('todas')">🌍 Todos</button>
+      <button [class.active]="categoriaActiva === 'playa'" (click)="setCategoria('playa')">🏖️ Playa</button>
+      <button [class.active]="categoriaActiva === 'montaña'" (click)="setCategoria('montaña')">🏔️ Montaña</button>
+      <button [class.active]="categoriaActiva === 'ciudad'" (click)="setCategoria('ciudad')">🏙️ Ciudad</button>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div *ngIf="cargando" class="grid">
+    <div class="skeleton" *ngFor="let i of [1,2,3,4,5,6,7,8]"></div>
+  </div>
+
+  <!-- SIN RESULTADOS -->
+  <div *ngIf="!cargando && filtrados.length === 0" class="empty">
+    <span>😕</span>
+    <p>No hay destinos que coincidan con tu búsqueda.</p>
+    <button (click)="busqueda=''; categoriaActiva='todas'; aplicarFiltros()">Limpiar filtros</button>
+  </div>
+
+  <!-- GRID DE DESTINOS -->
+  <div class="grid" *ngIf="!cargando && filtrados.length > 0">
+    <a class="card" *ngFor="let d of filtrados" [href]="'/destino/' + d.id">
+      <div class="card-img">
+        <img [src]="d.imagen" [alt]="d.nombre" loading="lazy">
+        <span class="card-cat">{{ d.categoria }}</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ d.nombre }}</h3>
+        <p class="card-pais">📍 {{ d.pais }}</p>
+        <p class="card-desc">{{ d.descripcion | slice:0:80 }}...</p>
+        <div class="card-footer">
+          <span class="card-precio">Desde <strong>{{ d.precio }}€</strong>/día</span>
+          <span class="card-link">Ver destino →</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+</div>

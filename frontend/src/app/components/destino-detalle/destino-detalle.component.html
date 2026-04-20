@@ -1,46 +1,119 @@
 <div class="detalle-container" *ngIf="destino">
-  <img [src]="destino.imagen" [alt]="destino.nombre" class="detalle-imagen">
 
+  <!-- IMAGEN + INFO PRINCIPAL -->
+  <div class="detalle-hero">
+    <img [src]="destino.imagen" [alt]="destino.nombre" class="detalle-imagen">
+    <div class="detalle-overlay">
+      <span class="categoria-badge">{{ destino.categoria }}</span>
+      <h1>{{ destino.nombre }}</h1>
+      <p class="pais">📍 {{ destino.pais }}</p>
+      <p class="precio-hero">Desde <strong>{{ destino.precio }}€</strong> / día</p>
+    </div>
+  </div>
+
+  <!-- DESCRIPCIÓN -->
   <div class="detalle-info">
-    <h1>{{ destino.nombre }}, {{ destino.pais }}</h1>
-    <p class="categoria">{{ destino.categoria }}</p>
     <p class="descripcion">{{ destino.descripcion }}</p>
-    <p class="precio">Desde <strong>{{ destino.precio }}€</strong></p>
   </div>
 
+  <!-- ACCIONES: RESERVAR Y RESEÑA -->
   <div class="detalle-acciones" *ngIf="estaLogueado()">
+
+    <!-- FORMULARIO RESERVA -->
     <div class="reserva-form">
-      <h3>Reservar este destino</h3>
-      <label>Fecha de inicio</label>
-      <input type="date" [(ngModel)]="fechaInicio" />
-      <label>Fecha de fin</label>
-      <input type="date" [(ngModel)]="fechaFin" />
-      <button (click)="hacerReserva()">Reservar</button>
+      <h3>✈️ Reservar este destino</h3>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>📅 Fecha de inicio</label>
+          <input type="date" [(ngModel)]="fechaInicio" (ngModelChange)="calcularPrecio()" [min]="hoy" />
+        </div>
+        <div class="form-group">
+          <label>📅 Fecha de fin</label>
+          <input type="date" [(ngModel)]="fechaFin" (ngModelChange)="calcularPrecio()" [min]="fechaInicio || hoy" />
+        </div>
+        <div class="form-group">
+          <label>👥 Número de personas</label>
+          <select [(ngModel)]="numPersonas" (ngModelChange)="calcularPrecio()">
+            <option *ngFor="let n of [1,2,3,4,5,6,7,8,9,10]" [value]="n">{{ n }} persona{{ n > 1 ? 's' : '' }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- RESUMEN DE PRECIO -->
+      <div class="precio-resumen" *ngIf="precioTotal > 0">
+        <div class="precio-linea">
+          <span>🗓️ {{ numDias }} día{{ numDias !== 1 ? 's' : '' }} × {{ numPersonas }} persona{{ numPersonas > 1 ? 's' : '' }} × {{ destino.precio }}€</span>
+          <strong>{{ precioTotal | number:'1.0-0' }}€</strong>
+        </div>
+        <div class="precio-total">
+          <span>💰 Total estimado</span>
+          <strong class="total-valor">{{ precioTotal | number:'1.0-0' }}€</strong>
+        </div>
+      </div>
+
+      <button class="btn-reservar" (click)="hacerReserva()" [disabled]="!fechaInicio || !fechaFin">
+        Confirmar reserva
+      </button>
+
+      <p class="mensaje exito" *ngIf="mensajeReserva && !mensajeReserva.includes('Error')">{{ mensajeReserva }}</p>
+      <p class="mensaje error" *ngIf="mensajeReserva && mensajeReserva.includes('Error')">{{ mensajeReserva }}</p>
     </div>
 
+    <!-- FORMULARIO RESEÑA -->
     <div class="resena-form">
-      <h3>Dejar una reseña</h3>
-      <label>Puntuación (1-5)</label>
-      <input type="number" [(ngModel)]="puntuacion" min="1" max="5" />
-      <label>Comentario</label>
-      <textarea [(ngModel)]="comentario" placeholder="Escribe tu experiencia..."></textarea>
-      <button (click)="dejarResena()">Publicar reseña</button>
+      <h3>⭐ Dejar una reseña</h3>
+
+      <div class="form-group">
+        <label>Puntuación</label>
+        <div class="estrellas">
+          <span
+            *ngFor="let i of [1,2,3,4,5]"
+            class="estrella"
+            [class.activa]="i <= puntuacion"
+            (click)="puntuacion = i">★</span>
+          <span class="puntuacion-texto">{{ puntuacion }}/5</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Comentario</label>
+        <textarea [(ngModel)]="comentario" placeholder="Comparte tu experiencia..."></textarea>
+      </div>
+
+      <button class="btn-resena" (click)="dejarResena()">Publicar reseña</button>
+
+      <p class="mensaje exito" *ngIf="mensajeResena && !mensajeResena.includes('Error')">{{ mensajeResena }}</p>
+      <p class="mensaje error" *ngIf="mensajeResena && mensajeResena.includes('Error')">{{ mensajeResena }}</p>
     </div>
+
   </div>
 
+  <!-- AVISO NO LOGUEADO -->
   <p *ngIf="!estaLogueado()" class="aviso">
     <a routerLink="/usuario">Inicia sesión</a> para reservar o dejar una reseña.
   </p>
 
-  <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
-
+  <!-- RESEÑAS -->
   <div class="resenas">
-    <h3>Reseñas ({{ resenas.length }})</h3>
-    <p *ngIf="resenas.length === 0">Todavía no hay reseñas para este destino.</p>
+    <h3>Opiniones de viajeros ({{ resenas.length }})</h3>
+    <p *ngIf="resenas.length === 0" class="sin-resenas">Sé el primero en dejar una reseña 🌟</p>
     <div class="resena" *ngFor="let resena of resenas">
-      <strong>{{ resena.usuario.nombre }}</strong>
-      <span class="puntuacion">⭐ {{ resena.puntuacion }}/5</span>
-      <p>{{ resena.comentario }}</p>
+      <div class="resena-header">
+        <div class="resena-avatar">{{ resena.usuario.nombre.charAt(0).toUpperCase() }}</div>
+        <div>
+          <strong>{{ resena.usuario.nombre }}</strong>
+          <div class="estrellas-mini">
+            <span *ngFor="let i of [1,2,3,4,5]" [class.activa]="i <= resena.puntuacion">★</span>
+          </div>
+        </div>
+      </div>
+      <p class="resena-comentario">{{ resena.comentario }}</p>
     </div>
   </div>
+
+</div>
+
+<div class="loading" *ngIf="!destino">
+  <p>Cargando destino...</p>
 </div>

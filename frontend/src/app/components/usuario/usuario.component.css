@@ -1,87 +1,374 @@
-.login-container, .perfil-container {
-  max-width: 500px;
+/* ===== CONTENEDOR GENERAL ===== */
+.usuario-container {
+  max-width: 900px;
   margin: 2rem auto;
-  padding: 1.5rem;
-  background-color: #F3F3F3;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 0 1rem;
 }
 
-.login-container input {
-  display: block;
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  width: 100%;
+/* ===== AUTH (login/registro) ===== */
+.modo-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
-button {
-  padding: 0.5rem 1rem;
-  margin: 0.5rem 0.25rem;
-  border: none;
-  border-radius: 6px;
+.modo-tabs button {
+  padding: 0.6rem 2rem;
+  border: 2px solid #2B7A78;
+  border-radius: 8px;
+  background: white;
+  color: #2B7A78;
+  font-weight: 600;
   cursor: pointer;
-  background-color: #2B7A78;
+  transition: all 0.2s;
+}
+
+.modo-tabs button.active {
+  background: #2B7A78;
   color: white;
 }
 
-button.logout {
-  background-color: #D9534F;
+.auth-container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.auth-container h2 {
+  margin-bottom: 1.5rem;
+  color: #2B7A78;
+  text-align: center;
+}
+
+.auth-container input {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.auth-container input:focus {
+  outline: none;
+  border-color: #2B7A78;
+}
+
+/* ===== BOTONES ===== */
+.btn-primary {
+  display: inline-block;
+  width: 100%;
+  padding: 0.75rem;
+  background: #2B7A78;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.2s;
+  box-sizing: border-box;
+}
+
+.btn-primary:hover {
+  background: #1f5a58;
 }
 
 .btn-admin {
   display: inline-block;
   padding: 0.75rem 1.5rem;
-  margin-top: 1rem;
-  background-color: #2B7A78;
+  background: #2B7A78;
   color: white;
   text-decoration: none;
-  border-radius: 6px;
-  font-weight: bold;
-  transition: background-color 0.3s;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.2s;
+  margin-top: 0.5rem;
 }
 
 .btn-admin:hover {
-  background-color: #1f5a58;
+  background: #1f5a58;
 }
 
-.perfil-info p {
-  margin: 0.5rem 0;
+.btn-cancelar {
+  padding: 0.35rem 0.75rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+  white-space: nowrap;
 }
 
-.perfil-actions {
-  margin-top: 1.5rem;
+.btn-cancelar:hover {
+  background: #c0392b;
 }
+
+.btn-logout {
+  margin-top: 2rem;
+  padding: 0.6rem 1.5rem;
+  background: #95a5a6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.btn-logout:hover {
+  background: #7f8c8d;
+}
+
+/* ===== PERFIL ===== */
+.perfil-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  padding: 2rem;
+}
+
+.perfil-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  background: #2B7A78;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.perfil-info h2 {
+  margin: 0 0 0.3rem 0;
+  font-size: 1.3rem;
+  color: #2c3e50;
+}
+
+.rol-badge {
+  display: inline-block;
+  padding: 0.2rem 0.75rem;
+  background: #e8f4f3;
+  color: #2B7A78;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.rol-badge.admin {
+  background: #fef3cd;
+  color: #856404;
+}
+
+/* ===== SECCIONES ===== */
 .seccion {
-    margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.seccion-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.seccion-header h3 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.contador {
+  background: #e8f4f3;
+  color: #2B7A78;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.admin-seccion {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.admin-seccion h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #95a5a6;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.empty-state .btn-primary {
+  width: auto;
+  padding: 0.6rem 1.5rem;
+}
+
+/* ===== TABLA ===== */
+.tabla-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+thead {
+  background: #f8f9fa;
+}
+
+th {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+  white-space: nowrap;
+}
+
+td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.td-destino strong {
+  display: block;
+  color: #2c3e50;
+}
+
+.td-destino small {
+  color: #95a5a6;
+  font-size: 0.82rem;
+}
+
+.td-fechas span {
+  display: block;
+  color: #2c3e50;
+}
+
+.td-fechas small {
+  color: #95a5a6;
+  font-size: 0.82rem;
+}
+
+.td-center {
+  text-align: center;
+}
+
+.td-precio {
+  font-weight: 600;
+  color: #2B7A78;
+}
+
+/* ===== BADGES DE ESTADO ===== */
+.estado-badge {
+  display: inline-block;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.estado-badge.pendiente {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.estado-badge.confirmada {
+  background: #cfe2ff;
+  color: #0a58ca;
+}
+
+.estado-badge.completada {
+  background: #d1e7dd;
+  color: #146c43;
+}
+
+.estado-badge.cancelada {
+  background: #f8d7da;
+  color: #842029;
+}
+
+.completada-icon, .cancelada-icon {
+  font-size: 1.1rem;
+}
+
+/* ===== MENSAJES ===== */
+.mensaje {
+  margin-top: 0.75rem;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #d1e7dd;
+  color: #146c43;
+}
+
+.mensaje.error {
+  background: #f8d7da;
+  color: #842029;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .perfil-header {
+    flex-direction: column;
+    text-align: center;
   }
-  
-  .destinos li {
-    list-style: none;
-    padding: 0.3rem 0;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 0.5rem;
-  }
-  
-  table th, table td {
-    border: 1px solid #ccc;
-    padding: 0.5rem;
-    text-align: left;
-  }
-  
-  .badges {
-    margin-top: 0.5rem;
-  }
-  
-  .badge {
-    display: inline-block;
-    background-color: #2B7A78;
-    color: white;
-    padding: 0.4rem 0.8rem;
-    margin: 0.2rem;
-    border-radius: 20px;
+
+  th, td {
+    padding: 0.6rem 0.5rem;
     font-size: 0.85rem;
   }
+}

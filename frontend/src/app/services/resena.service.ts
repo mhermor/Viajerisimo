@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class ResenaService {
-  private apiUrl = '${environment.apiUrl}/resenas';
+  private apiUrl = `${environment.apiUrl}/resenas`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
