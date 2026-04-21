@@ -1,5 +1,5 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { isPlatformBrowser } from '@angular/common';
@@ -56,4 +56,21 @@ export class AuthService {
   estaLogueado(): boolean {
     return this.isBrowser() && !!localStorage.getItem('token');
   }
+
+  actualizarPerfil(datos: any): Observable<any> {
+  return this.http.put(`${environment.apiUrl}/usuarios/perfil`,   // PUT no POST
+    datos,
+    { headers: new HttpHeaders({ 'Authorization': `Bearer ${this.getToken()}` }) }
+  );
+}
+
+getEstadisticas(): Observable<any> {
+  return this.http.get(`${environment.apiUrl}/usuarios/estadisticas`,
+    { headers: new HttpHeaders({ 'Authorization': `Bearer ${this.getToken()}` }) }
+  );
+}
+
+actualizarNombre(nombre: string) {
+  localStorage.setItem('nombre', nombre);
+}
 }

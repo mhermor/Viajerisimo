@@ -25,17 +25,81 @@
     </div>
   </div>
 
-  <!-- PANEL DE USUARIO LOGUEADO -->
+  <!-- PANEL LOGUEADO -->
   <div *ngIf="estaLogueado()" class="perfil-container">
 
-    <!-- CABECERA PERFIL -->
+    <!-- CABECERA -->
     <div class="perfil-header">
       <div class="avatar">{{ getNombre().charAt(0).toUpperCase() }}</div>
       <div class="perfil-info">
-        <h2>¡Bienvenido, {{ getNombre() }}!</h2>
+        <h2>{{ getNombre() }}</h2>
         <span class="rol-badge" [class.admin]="esAdmin()">
           {{ esAdmin() ? '⚙️ Administrador' : '✈️ Viajero' }}
         </span>
+      </div>
+      <button class="btn-editar" (click)="abrirEditarPerfil()" *ngIf="!esAdmin()">
+        ✏️ Editar perfil
+      </button>
+    </div>
+
+    <!-- ESTADÍSTICAS (solo usuarios normales) -->
+    <div *ngIf="!esAdmin()" class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-valor">{{ stats.totalReservas }}</span>
+        <span class="stat-label">Reservas totales</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-valor">{{ stats.reservasActivas }}</span>
+        <span class="stat-label">Reservas activas</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-valor">{{ stats.destinosVisitados }}</span>
+        <span class="stat-label">Destinos visitados</span>
+      </div>
+      <div class="stat-card destacado">
+        <span class="stat-valor">{{ stats.gastoTotal | number:'1.0-0' }}€</span>
+        <span class="stat-label">Gasto total</span>
+      </div>
+    </div>
+
+    <!-- MODAL EDITAR PERFIL -->
+    <div class="modal-overlay" *ngIf="mostrarEditarPerfil" (click)="mostrarEditarPerfil = false">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Editar perfil</h3>
+          <button class="modal-close" (click)="mostrarEditarPerfil = false">✕</button>
+        </div>
+
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" [(ngModel)]="editNombre" placeholder="Tu nombre" />
+        </div>
+
+        <div class="separador">
+          <span>Cambiar contraseña (opcional)</span>
+        </div>
+
+        <div class="form-group">
+          <label>Contraseña actual</label>
+          <input type="password" [(ngModel)]="passwordActual" placeholder="Tu contraseña actual" />
+        </div>
+        <div class="form-group">
+          <label>Nueva contraseña</label>
+          <input type="password" [(ngModel)]="passwordNueva" placeholder="Mínimo 6 caracteres" />
+        </div>
+        <div class="form-group">
+          <label>Confirmar nueva contraseña</label>
+          <input type="password" [(ngModel)]="passwordConfirmar" placeholder="Repite la nueva contraseña" />
+        </div>
+
+        <p class="mensaje" [class.error]="!exitoPerfil" [class.exito]="exitoPerfil" *ngIf="mensajePerfil">
+          {{ mensajePerfil }}
+        </p>
+
+        <div class="modal-actions">
+          <button class="btn-cancelar-modal" (click)="mostrarEditarPerfil = false">Cancelar</button>
+          <button class="btn-primary" (click)="guardarPerfil()">Guardar cambios</button>
+        </div>
       </div>
     </div>
 
@@ -46,7 +110,7 @@
       <a href="/admin" class="btn-admin">Ir al Panel Admin →</a>
     </div>
 
-    <!-- MIS RESERVAS (usuarios normales) -->
+    <!-- MIS RESERVAS -->
     <div *ngIf="!esAdmin()" class="seccion">
       <div class="seccion-header">
         <h3>📅 Mis Reservas</h3>
@@ -55,14 +119,12 @@
         </span>
       </div>
 
-      <!-- Sin reservas -->
       <div *ngIf="reservas.length === 0" class="empty-state">
         <span class="empty-icon">🗺️</span>
         <p>Todavía no tienes reservas.</p>
-        <a href="/explora" class="btn-primary">Explorar destinos</a>
+        <a href="/destinos" class="btn-primary">Explorar destinos</a>
       </div>
 
-      <!-- Tabla de reservas -->
       <div *ngIf="reservas.length > 0" class="tabla-wrapper">
         <table>
           <thead>
@@ -88,19 +150,16 @@
               <td class="td-center">{{ reserva.numPersonas || 1 }} 👤</td>
               <td class="td-precio">{{ reserva.precioTotal ? (reserva.precioTotal | number:'1.0-0') + '€' : '-' }}</td>
               <td>
-                <span class="estado-badge" [ngClass]="reserva.estado">
-                  {{ reserva.estado }}
-                </span>
+                <span class="estado-badge" [ngClass]="reserva.estado">{{ reserva.estado }}</span>
               </td>
               <td>
-                <button
-                  class="btn-cancelar"
+                <button class="btn-cancelar"
                   *ngIf="reserva.estado === 'pendiente' || reserva.estado === 'confirmada'"
                   (click)="cancelarReserva(reserva.id)">
                   Cancelar
                 </button>
-                <span *ngIf="reserva.estado === 'completada'" class="completada-icon">✅</span>
-                <span *ngIf="reserva.estado === 'cancelada'" class="cancelada-icon">❌</span>
+                <span *ngIf="reserva.estado === 'completada'">✅</span>
+                <span *ngIf="reserva.estado === 'cancelada'">❌</span>
               </td>
             </tr>
           </tbody>
@@ -111,6 +170,5 @@
     </div>
 
     <button class="btn-logout" (click)="logout()">Cerrar Sesión</button>
-
   </div>
 </div>
