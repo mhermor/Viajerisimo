@@ -26,43 +26,117 @@
   </div>
 
   <!-- PANEL LOGUEADO -->
-  <div *ngIf="estaLogueado()" class="perfil-container">
+  <div *ngIf="estaLogueado()">
 
-    <!-- CABECERA -->
-    <div class="perfil-header">
-      <div class="avatar">{{ getNombre().charAt(0).toUpperCase() }}</div>
-      <div class="perfil-info">
-        <h2>{{ getNombre() }}</h2>
-        <span class="rol-badge" [class.admin]="esAdmin()">
-          {{ esAdmin() ? '⚙️ Administrador' : '✈️ Viajero' }}
-        </span>
-      </div>
-      <button class="btn-editar" (click)="abrirEditarPerfil()" *ngIf="!esAdmin()">
-        ✏️ Editar perfil
-      </button>
-    </div>
+    <div class="perfil-container">
 
-    <!-- ESTADÍSTICAS (solo usuarios normales) -->
-    <div *ngIf="!esAdmin()" class="stats-grid">
-      <div class="stat-card">
-        <span class="stat-valor">{{ stats.totalReservas }}</span>
-        <span class="stat-label">Reservas totales</span>
+      <!-- CABECERA -->
+      <div class="perfil-header">
+        <div class="avatar">{{ getNombre().charAt(0).toUpperCase() }}</div>
+        <div class="perfil-info">
+          <h2>{{ getNombre() }}</h2>
+          <span class="rol-badge" [class.admin]="esAdmin()">
+            {{ esAdmin() ? '⚙️ Administrador' : '✈️ Viajero' }}
+          </span>
+        </div>
+        <button class="btn-editar" (click)="abrirEditarPerfil()" *ngIf="!esAdmin()">
+          ✏️ Editar perfil
+        </button>
       </div>
-      <div class="stat-card">
-        <span class="stat-valor">{{ stats.reservasActivas }}</span>
-        <span class="stat-label">Reservas activas</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-valor">{{ stats.destinosVisitados }}</span>
-        <span class="stat-label">Destinos visitados</span>
-      </div>
-      <div class="stat-card destacado">
-        <span class="stat-valor">{{ stats.gastoTotal | number:'1.0-0' }}€</span>
-        <span class="stat-label">Gasto total</span>
-      </div>
-    </div>
 
-    <!-- MODAL EDITAR PERFIL -->
+      <!-- ESTADÍSTICAS (solo usuarios normales) -->
+      <div *ngIf="!esAdmin()" class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-valor">{{ stats.totalReservas }}</span>
+          <span class="stat-label">Reservas totales</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-valor">{{ stats.reservasActivas }}</span>
+          <span class="stat-label">Reservas activas</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-valor">{{ stats.destinosVisitados }}</span>
+          <span class="stat-label">Destinos visitados</span>
+        </div>
+        <div class="stat-card destacado">
+          <span class="stat-valor">{{ stats.gastoTotal | number:'1.0-0' }}€</span>
+          <span class="stat-label">Gasto total</span>
+        </div>
+      </div>
+
+      <!-- PANEL ADMIN -->
+      <div *ngIf="esAdmin()" class="seccion admin-seccion">
+        <h3>🔧 Panel de Administración</h3>
+        <p>Gestiona destinos, reservas y usuarios desde el panel de administración.</p>
+        <a href="/admin" class="btn-admin">Ir al Panel Admin →</a>
+      </div>
+
+      <!-- MIS RESERVAS -->
+      <div *ngIf="!esAdmin()" class="seccion">
+        <div class="seccion-header">
+          <h3>📅 Mis Reservas</h3>
+          <span class="contador" *ngIf="reservas.length > 0">
+            {{ reservas.length }} reserva{{ reservas.length !== 1 ? 's' : '' }}
+          </span>
+        </div>
+
+        <div *ngIf="reservas.length === 0" class="empty-state">
+          <span class="empty-icon">🗺️</span>
+          <p>Todavía no tienes reservas.</p>
+          <a href="/destinos" class="btn-primary">Explorar destinos</a>
+        </div>
+
+        <div *ngIf="reservas.length > 0" class="tabla-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Destino</th>
+                <th>Fechas</th>
+                <th>Personas</th>
+                <th>Precio total</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let reserva of reservas">
+                <td class="td-destino">
+                  <a [href]="'/destino/' + reserva.destinoId" class="link-destino">
+                    <strong>{{ reserva.destino?.nombre }}</strong>
+                    <small>{{ reserva.destino?.pais }}</small>
+                  </a>
+                </td>
+                <td class="td-fechas">
+                  <span>{{ reserva.fechaInicio | date:'dd/MM/yyyy' }}</span>
+                  <small>→ {{ reserva.fechaFin | date:'dd/MM/yyyy' }}</small>
+                </td>
+                <td class="td-center">{{ reserva.numPersonas || 1 }} 👤</td>
+                <td class="td-precio">{{ reserva.precioTotal ? (reserva.precioTotal | number:'1.0-0') + '€' : '-' }}</td>
+                <td>
+                  <span class="estado-badge" [ngClass]="reserva.estado">{{ reserva.estado }}</span>
+                </td>
+                <td>
+                  <button class="btn-cancelar"
+                    *ngIf="reserva.estado === 'pendiente' || reserva.estado === 'confirmada'"
+                    (click)="cancelarReserva(reserva.id)">
+                    Cancelar
+                  </button>
+                  <span *ngIf="reserva.estado === 'completada'">✅</span>
+                  <span *ngIf="reserva.estado === 'cancelada'">❌</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mensaje error" *ngIf="mensaje">{{ mensaje }}</p>
+      </div>
+
+      <button class="btn-logout" (click)="logout()">Cerrar Sesión</button>
+
+    </div><!-- fin perfil-container -->
+
+    <!-- MODAL FUERA del perfil-container -->
     <div class="modal-overlay" *ngIf="mostrarEditarPerfil" (click)="mostrarEditarPerfil = false">
       <div class="modal" (click)="$event.stopPropagation()">
         <div class="modal-header">
@@ -101,74 +175,8 @@
           <button class="btn-primary" (click)="guardarPerfil()">Guardar cambios</button>
         </div>
       </div>
-    </div>
+    </div><!-- fin modal -->
 
-    <!-- PANEL ADMIN -->
-    <div *ngIf="esAdmin()" class="seccion admin-seccion">
-      <h3>🔧 Panel de Administración</h3>
-      <p>Gestiona destinos, reservas y usuarios desde el panel de administración.</p>
-      <a href="/admin" class="btn-admin">Ir al Panel Admin →</a>
-    </div>
+  </div><!-- fin estaLogueado -->
 
-    <!-- MIS RESERVAS -->
-    <div *ngIf="!esAdmin()" class="seccion">
-      <div class="seccion-header">
-        <h3>📅 Mis Reservas</h3>
-        <span class="contador" *ngIf="reservas.length > 0">
-          {{ reservas.length }} reserva{{ reservas.length !== 1 ? 's' : '' }}
-        </span>
-      </div>
-
-      <div *ngIf="reservas.length === 0" class="empty-state">
-        <span class="empty-icon">🗺️</span>
-        <p>Todavía no tienes reservas.</p>
-        <a href="/destinos" class="btn-primary">Explorar destinos</a>
-      </div>
-
-      <div *ngIf="reservas.length > 0" class="tabla-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Destino</th>
-              <th>Fechas</th>
-              <th>Personas</th>
-              <th>Precio total</th>
-              <th>Estado</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let reserva of reservas">
-              <td class="td-destino">
-                <strong>{{ reserva.destino?.nombre }}</strong>
-                <small>{{ reserva.destino?.pais }}</small>
-              </td>
-              <td class="td-fechas">
-                <span>{{ reserva.fechaInicio | date:'dd/MM/yyyy' }}</span>
-                <small>→ {{ reserva.fechaFin | date:'dd/MM/yyyy' }}</small>
-              </td>
-              <td class="td-center">{{ reserva.numPersonas || 1 }} 👤</td>
-              <td class="td-precio">{{ reserva.precioTotal ? (reserva.precioTotal | number:'1.0-0') + '€' : '-' }}</td>
-              <td>
-                <span class="estado-badge" [ngClass]="reserva.estado">{{ reserva.estado }}</span>
-              </td>
-              <td>
-                <button class="btn-cancelar"
-                  *ngIf="reserva.estado === 'pendiente' || reserva.estado === 'confirmada'"
-                  (click)="cancelarReserva(reserva.id)">
-                  Cancelar
-                </button>
-                <span *ngIf="reserva.estado === 'completada'">✅</span>
-                <span *ngIf="reserva.estado === 'cancelada'">❌</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <p class="mensaje error" *ngIf="mensaje">{{ mensaje }}</p>
-    </div>
-
-    <button class="btn-logout" (click)="logout()">Cerrar Sesión</button>
-  </div>
 </div>

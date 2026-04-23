@@ -215,50 +215,6 @@
 }
 
 /* ===== MODAL ===== */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.modal {
-  background: white;
-  border-radius: 14px;
-  padding: 2rem;
-  width: 100%;
-  max-width: 460px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.modal-header h3 { margin: 0; color: #2c3e50; font-size: 1.2rem; }
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 1.1rem;
-  cursor: pointer;
-  color: #95a5a6;
-  padding: 0.2rem;
-  transition: color 0.2s;
-}
-
-.modal-close:hover { color: #2c3e50; }
-
-.form-group {
-  margin-bottom: 1rem;
-}
 
 .form-group label {
   display: block;
@@ -306,14 +262,6 @@
   font-size: 0.82rem;
   color: #95a5a6;
 }
-
-.modal-actions {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 1.25rem;
-}
-
-.modal-actions .btn-primary { flex: 1; }
 
 .btn-cancelar-modal {
   flex: 1;
@@ -434,4 +382,76 @@ tbody tr:hover { background: #f8f9fa; }
   .perfil-header { flex-wrap: wrap; }
   .btn-editar { width: 100%; margin-left: 0; margin-top: 0.5rem; }
   th, td { padding: 0.6rem 0.5rem; font-size: 0.85rem; }
+}
+
+.link-destino {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+
+.link-destino:hover strong {
+  color: #2B7A78;
+  text-decoration: underline;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.6);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: white;
+  border-radius: 14px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 460px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h3 { margin: 0; color: #2c3e50; font-size: 1.2rem; }
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #95a5a6;
+}
+
+.modal-close:hover { color: #2c3e50; }
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.modal-actions .btn-primary { flex: 1; }
+
+.btn-cancelar-modal {
+  flex: 1;
+  padding: 0.75rem;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #555;
 }

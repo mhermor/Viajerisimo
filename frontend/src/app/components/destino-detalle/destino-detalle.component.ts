@@ -124,4 +124,19 @@ export class DestinoDetalleComponent implements OnInit {
       error: () => this.mensajeResena = 'Error al publicar la reseña'
     });
   }
+
+  getNombreUsuario(): string {
+  return this.authService.getNombre() || '';
+}
+
+eliminarResena(id: number) {
+  if (!confirm('¿Eliminar esta reseña?')) return;
+  this.resenaService.eliminarResena(id).subscribe({
+    next: () => {
+      this.resenas = this.resenas.filter(r => r.id !== id);
+      this.mensajeResena = 'Reseña eliminada correctamente';
+    },
+    error: () => this.mensajeResena = 'Error al eliminar la reseña'
+  });
+}
 }

@@ -100,6 +100,7 @@ export class UsuarioComponent implements OnInit {
   }
 
   abrirEditarPerfil() {
+     console.log('Abriendo modal...');
     this.editNombre = this.getNombre();
     this.passwordActual = '';
     this.passwordNueva = '';

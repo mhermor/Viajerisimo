@@ -99,17 +99,24 @@
     <h3>Opiniones de viajeros ({{ resenas.length }})</h3>
     <p *ngIf="resenas.length === 0" class="sin-resenas">Sé el primero en dejar una reseña 🌟</p>
     <div class="resena" *ngFor="let resena of resenas">
-      <div class="resena-header">
-        <div class="resena-avatar">{{ resena.usuario.nombre.charAt(0).toUpperCase() }}</div>
-        <div>
-          <strong>{{ resena.usuario.nombre }}</strong>
-          <div class="estrellas-mini">
-            <span *ngFor="let i of [1,2,3,4,5]" [class.activa]="i <= resena.puntuacion">★</span>
-          </div>
-        </div>
+  <div class="resena-header">
+    <div class="resena-avatar">{{ resena.usuario.nombre.charAt(0).toUpperCase() }}</div>
+    <div>
+      <strong>{{ resena.usuario.nombre }}</strong>
+      <div class="estrellas-mini">
+        <span *ngFor="let i of [1,2,3,4,5]" [class.activa]="i <= resena.puntuacion">★</span>
       </div>
-      <p class="resena-comentario">{{ resena.comentario }}</p>
     </div>
+    <!-- Botón eliminar solo si es la reseña del usuario logueado -->
+    <button
+      class="btn-eliminar-resena"
+      *ngIf="estaLogueado() && resena.usuario.nombre === getNombreUsuario()"
+      (click)="eliminarResena(resena.id)">
+      🗑️
+    </button>
+  </div>
+  <p class="resena-comentario">{{ resena.comentario }}</p>
+</div>
   </div>
 
 </div>
