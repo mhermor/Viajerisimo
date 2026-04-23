@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -99,16 +99,21 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  abrirEditarPerfil() {
-     console.log('Abriendo modal...');
-    this.editNombre = this.getNombre();
-    this.passwordActual = '';
-    this.passwordNueva = '';
-    this.passwordConfirmar = '';
-    this.mensajePerfil = '';
-    this.exitoPerfil = false;
-    this.mostrarEditarPerfil = true;
-  }
+@ViewChild('editarDialog') editarDialog!: ElementRef<HTMLDialogElement>;
+
+abrirEditarPerfil() {
+  this.editNombre = this.getNombre();
+  this.passwordActual = '';
+  this.passwordNueva = '';
+  this.passwordConfirmar = '';
+  this.mensajePerfil = '';
+  this.exitoPerfil = false;
+  this.editarDialog.nativeElement.showModal();
+}
+
+cerrarEditarPerfil() {
+  this.editarDialog.nativeElement.close();
+}
 
   guardarPerfil() {
     this.mensajePerfil = '';

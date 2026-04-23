@@ -136,46 +136,41 @@
 
     </div><!-- fin perfil-container -->
 
-    <!-- MODAL FUERA del perfil-container -->
-    <div class="modal-overlay" *ngIf="mostrarEditarPerfil" (click)="mostrarEditarPerfil = false">
-      <div class="modal" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-          <h3>Editar perfil</h3>
-          <button class="modal-close" (click)="mostrarEditarPerfil = false">✕</button>
-        </div>
+    <!-- DIALOG NATIVO HTML5 -->
+<dialog #editarDialog class="editar-dialog">
+    <h3>Editar perfil</h3>
 
-        <div class="form-group">
-          <label>Nombre</label>
-          <input type="text" [(ngModel)]="editNombre" placeholder="Tu nombre" />
-        </div>
+  <div class="form-group">
+    <label>Nombre</label>
+    <input type="text" [(ngModel)]="editNombre" placeholder="Tu nombre" />
+  </div>
 
-        <div class="separador">
-          <span>Cambiar contraseña (opcional)</span>
-        </div>
+  <div class="separador">
+    <span>Cambiar contraseña (opcional)</span>
+  </div>
 
-        <div class="form-group">
-          <label>Contraseña actual</label>
-          <input type="password" [(ngModel)]="passwordActual" placeholder="Tu contraseña actual" />
-        </div>
-        <div class="form-group">
-          <label>Nueva contraseña</label>
-          <input type="password" [(ngModel)]="passwordNueva" placeholder="Mínimo 6 caracteres" />
-        </div>
-        <div class="form-group">
-          <label>Confirmar nueva contraseña</label>
-          <input type="password" [(ngModel)]="passwordConfirmar" placeholder="Repite la nueva contraseña" />
-        </div>
+  <div class="form-group">
+    <label>Contraseña actual</label>
+    <input type="password" [(ngModel)]="passwordActual" placeholder="Tu contraseña actual" />
+  </div>
+  <div class="form-group">
+    <label>Nueva contraseña</label>
+    <input type="password" [(ngModel)]="passwordNueva" placeholder="Mínimo 6 caracteres" />
+  </div>
+  <div class="form-group">
+    <label>Confirmar nueva contraseña</label>
+    <input type="password" [(ngModel)]="passwordConfirmar" placeholder="Repite la nueva contraseña" />
+  </div>
 
-        <p class="mensaje" [class.error]="!exitoPerfil" [class.exito]="exitoPerfil" *ngIf="mensajePerfil">
-          {{ mensajePerfil }}
-        </p>
+  <p class="mensaje" [class.error]="!exitoPerfil" [class.exito]="exitoPerfil" *ngIf="mensajePerfil">
+    {{ mensajePerfil }}
+  </p>
 
-        <div class="modal-actions">
-          <button class="btn-cancelar-modal" (click)="mostrarEditarPerfil = false">Cancelar</button>
-          <button class="btn-primary" (click)="guardarPerfil()">Guardar cambios</button>
-        </div>
-      </div>
-    </div><!-- fin modal -->
+  <div class="modal-actions">
+    <button class="btn-cancelar-modal" (click)="cerrarEditarPerfil()">Cancelar</button>
+    <button class="btn-primary" (click)="guardarPerfil()">Guardar cambios</button>
+  </div>
+</dialog>
 
   </div><!-- fin estaLogueado -->
 
