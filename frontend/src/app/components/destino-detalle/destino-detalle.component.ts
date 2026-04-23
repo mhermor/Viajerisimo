@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -15,6 +15,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './destino-detalle.component.css'
 })
 export class DestinoDetalleComponent implements OnInit {
+  @ViewChild('pagoDialog') pagoDialog!: ElementRef<HTMLDialogElement>;
+
   destino: any = null;
   resenas: any[] = [];
 
@@ -31,7 +33,16 @@ export class DestinoDetalleComponent implements OnInit {
   puntuacion: number = 5;
   mensajeResena: string = '';
 
-  // Fecha mínima = hoy
+  // Pago simulado
+  pagoNombre: string = '';
+  pagoTarjeta: string = '';
+  pagoCaducidad: string = '';
+  pagoCVV: string = '';
+  pagoProcesando: boolean = false;
+  pagoCompletado: boolean = false;
+  pagoError: string = '';
+  numeroReserva: string = '';
+
   hoy: string = new Date().toISOString().split('T')[0];
 
   constructor(
@@ -78,7 +89,8 @@ export class DestinoDetalleComponent implements OnInit {
     this.precioTotal = this.destino.precio * this.numDias * this.numPersonas;
   }
 
-  hacerReserva() {
+  // Abre el dialog de pago
+  abrirPago() {
     if (!this.fechaInicio || !this.fechaFin) {
       this.mensajeReserva = 'Por favor selecciona las fechas';
       return;
@@ -87,22 +99,85 @@ export class DestinoDetalleComponent implements OnInit {
       this.mensajeReserva = 'La fecha de fin debe ser posterior a la de inicio';
       return;
     }
-    this.reservaService.crearReserva({
-      destinoId: this.destino.id,
-      fechaInicio: this.fechaInicio,
-      fechaFin: this.fechaFin,
-      numPersonas: this.numPersonas
-    }).subscribe({
-      next: () => {
-        this.mensajeReserva = '¡Reserva realizada correctamente! 🎉';
-        this.fechaInicio = '';
-        this.fechaFin = '';
-        this.numPersonas = 1;
-        this.precioTotal = 0;
-        this.numDias = 0;
-      },
-      error: () => this.mensajeReserva = 'Error al realizar la reserva'
-    });
+    // Resetear estado del pago
+    this.pagoNombre = '';
+    this.pagoTarjeta = '';
+    this.pagoCaducidad = '';
+    this.pagoCVV = '';
+    this.pagoProcesando = false;
+    this.pagoCompletado = false;
+    this.pagoError = '';
+    this.mensajeReserva = '';
+    this.pagoDialog.nativeElement.showModal();
+  }
+
+  cerrarPago() {
+    if (this.pagoProcesando) return;
+    this.pagoDialog.nativeElement.close();
+  }
+
+  // Formatea el número de tarjeta con espacios cada 4 dígitos
+  formatearTarjeta(event: any) {
+    let val = event.target.value.replace(/\D/g, '').substring(0, 16);
+    val = val.replace(/(.{4})/g, '$1 ').trim();
+    this.pagoTarjeta = val;
+  }
+
+  // Formatea la caducidad MM/AA
+  formatearCaducidad(event: any) {
+    let val = event.target.value.replace(/\D/g, '').substring(0, 4);
+    if (val.length >= 2) val = val.substring(0, 2) + '/' + val.substring(2);
+    this.pagoCaducidad = val;
+  }
+
+  procesarPago() {
+    // Validaciones básicas
+    const tarjetaLimpia = this.pagoTarjeta.replace(/\s/g, '');
+    if (!this.pagoNombre.trim()) {
+      this.pagoError = 'Por favor introduce el nombre del titular';
+      return;
+    }
+    if (tarjetaLimpia.length !== 16) {
+      this.pagoError = 'El número de tarjeta debe tener 16 dígitos';
+      return;
+    }
+    if (this.pagoCaducidad.length !== 5) {
+      this.pagoError = 'Introduce la fecha de caducidad (MM/AA)';
+      return;
+    }
+    if (this.pagoCVV.length < 3) {
+      this.pagoError = 'El CVV debe tener 3 dígitos';
+      return;
+    }
+
+    this.pagoError = '';
+    this.pagoProcesando = true;
+
+    // Simulamos procesamiento de 2 segundos
+    setTimeout(() => {
+      this.reservaService.crearReserva({
+        destinoId: this.destino.id,
+        fechaInicio: this.fechaInicio,
+        fechaFin: this.fechaFin,
+        numPersonas: this.numPersonas
+      }).subscribe({
+        next: (res) => {
+          this.pagoProcesando = false;
+          this.pagoCompletado = true;
+          this.numeroReserva = 'VJ-' + String(res.id || Math.floor(Math.random() * 90000) + 10000).padStart(5, '0');
+          // Limpiar formulario de reserva
+          this.fechaInicio = '';
+          this.fechaFin = '';
+          this.numPersonas = 1;
+          this.precioTotal = 0;
+          this.numDias = 0;
+        },
+        error: () => {
+          this.pagoProcesando = false;
+          this.pagoError = 'Error al procesar la reserva. Inténtalo de nuevo.';
+        }
+      });
+    }, 2000);
   }
 
   dejarResena() {
@@ -126,17 +201,17 @@ export class DestinoDetalleComponent implements OnInit {
   }
 
   getNombreUsuario(): string {
-  return this.authService.getNombre() || '';
-}
+    return this.authService.getNombre() || '';
+  }
 
-eliminarResena(id: number) {
-  if (!confirm('¿Eliminar esta reseña?')) return;
-  this.resenaService.eliminarResena(id).subscribe({
-    next: () => {
-      this.resenas = this.resenas.filter(r => r.id !== id);
-      this.mensajeResena = 'Reseña eliminada correctamente';
-    },
-    error: () => this.mensajeResena = 'Error al eliminar la reseña'
-  });
-}
+  eliminarResena(id: number) {
+    if (!confirm('¿Eliminar esta reseña?')) return;
+    this.resenaService.eliminarResena(id).subscribe({
+      next: () => {
+        this.resenas = this.resenas.filter(r => r.id !== id);
+        this.mensajeResena = 'Reseña eliminada correctamente';
+      },
+      error: () => this.mensajeResena = 'Error al eliminar la reseña'
+    });
+  }
 }

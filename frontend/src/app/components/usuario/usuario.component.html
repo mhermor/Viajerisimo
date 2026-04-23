@@ -129,6 +129,16 @@
           </table>
         </div>
 
+        <!-- Leyenda de estados -->
+<div class="leyenda-estados" *ngIf="reservas.length > 0">
+  <span>ℹ️</span>
+  <span><strong>Pendiente:</strong> estamos procesando tu reserva</span>
+  <span>·</span>
+  <span><strong>Confirmada:</strong> reserva lista para el viaje</span>
+  <span>·</span>
+  <span><strong>Completada:</strong> viaje realizado</span>
+</div>
+
         <p class="mensaje error" *ngIf="mensaje">{{ mensaje }}</p>
       </div>
 

@@ -52,12 +52,11 @@
         </div>
       </div>
 
-      <button class="btn-reservar" (click)="hacerReserva()" [disabled]="!fechaInicio || !fechaFin">
-        Confirmar reserva
+      <button class="btn-reservar" (click)="abrirPago()" [disabled]="!fechaInicio || !fechaFin">
+        Proceder al pago →
       </button>
 
-      <p class="mensaje exito" *ngIf="mensajeReserva && !mensajeReserva.includes('Error')">{{ mensajeReserva }}</p>
-      <p class="mensaje error" *ngIf="mensajeReserva && mensajeReserva.includes('Error')">{{ mensajeReserva }}</p>
+      <p class="mensaje error" *ngIf="mensajeReserva">{{ mensajeReserva }}</p>
     </div>
 
     <!-- FORMULARIO RESEÑA -->
@@ -67,11 +66,8 @@
       <div class="form-group">
         <label>Puntuación</label>
         <div class="estrellas">
-          <span
-            *ngFor="let i of [1,2,3,4,5]"
-            class="estrella"
-            [class.activa]="i <= puntuacion"
-            (click)="puntuacion = i">★</span>
+          <span *ngFor="let i of [1,2,3,4,5]" class="estrella"
+            [class.activa]="i <= puntuacion" (click)="puntuacion = i">★</span>
           <span class="puntuacion-texto">{{ puntuacion }}/5</span>
         </div>
       </div>
@@ -99,25 +95,110 @@
     <h3>Opiniones de viajeros ({{ resenas.length }})</h3>
     <p *ngIf="resenas.length === 0" class="sin-resenas">Sé el primero en dejar una reseña 🌟</p>
     <div class="resena" *ngFor="let resena of resenas">
-  <div class="resena-header">
-    <div class="resena-avatar">{{ resena.usuario.nombre.charAt(0).toUpperCase() }}</div>
-    <div>
-      <strong>{{ resena.usuario.nombre }}</strong>
-      <div class="estrellas-mini">
-        <span *ngFor="let i of [1,2,3,4,5]" [class.activa]="i <= resena.puntuacion">★</span>
+      <div class="resena-header">
+        <div class="resena-avatar">{{ resena.usuario.nombre.charAt(0).toUpperCase() }}</div>
+        <div>
+          <strong>{{ resena.usuario.nombre }}</strong>
+          <div class="estrellas-mini">
+            <span *ngFor="let i of [1,2,3,4,5]" [class.activa]="i <= resena.puntuacion">★</span>
+          </div>
+        </div>
+        <button class="btn-eliminar-resena"
+          *ngIf="estaLogueado() && resena.usuario.nombre === getNombreUsuario()"
+          (click)="eliminarResena(resena.id)">🗑️</button>
+      </div>
+      <p class="resena-comentario">{{ resena.comentario }}</p>
+    </div>
+  </div>
+
+  <!-- DIALOG DE PAGO -->
+  <dialog #pagoDialog class="pago-dialog">
+
+    <!-- PROCESANDO -->
+    <div *ngIf="pagoProcesando" class="pago-procesando">
+      <div class="spinner"></div>
+      <p>Procesando pago...</p>
+      <small>Por favor no cierres esta ventana</small>
+    </div>
+
+    <!-- ÉXITO -->
+    <div *ngIf="pagoCompletado && !pagoProcesando" class="pago-exito">
+      <div class="exito-icono">✅</div>
+      <h3>¡Pago completado!</h3>
+      <p>Tu reserva ha sido confirmada.</p>
+      <div class="numero-reserva">
+        <small>Número de reserva</small>
+        <strong>{{ numeroReserva }}</strong>
+      </div>
+      <p class="exito-detalle">
+        {{ destino.nombre }} · {{ numDias }} días · {{ numPersonas }} persona{{ numPersonas > 1 ? 's' : '' }}
+      </p>
+      <button class="btn-cerrar-exito" (click)="cerrarPago()">Cerrar</button>
+      <a href="/usuario" class="btn-ver-reservas">Ver mis reservas →</a>
+    </div>
+
+    <!-- FORMULARIO DE PAGO -->
+    <div *ngIf="!pagoProcesando && !pagoCompletado" class="pago-form">
+
+      <div class="pago-header">
+        <h3>💳 Datos de pago</h3>
+      </div>
+
+      <!-- Resumen -->
+      <div class="pago-resumen">
+        <div class="pago-resumen-destino">
+          <img [src]="destino.imagen" [alt]="destino.nombre" class="pago-thumb">
+          <div>
+            <strong>{{ destino.nombre }}</strong>
+            <small>{{ numDias }} días · {{ numPersonas }} persona{{ numPersonas > 1 ? 's' : '' }}</small>
+          </div>
+        </div>
+        <div class="pago-resumen-total">
+          <span>Total</span>
+          <strong>{{ precioTotal | number:'1.0-0' }}€</strong>
+        </div>
+      </div>
+
+      <!-- Campos de tarjeta -->
+      <div class="campo-grupo">
+        <label>Titular de la tarjeta</label>
+        <input type="text" [(ngModel)]="pagoNombre" placeholder="Nombre Apellidos" />
+      </div>
+
+      <div class="campo-grupo">
+        <label>Número de tarjeta</label>
+        <div class="tarjeta-input">
+          <input type="text" [value]="pagoTarjeta" (input)="formatearTarjeta($event)"
+            placeholder="0000 0000 0000 0000" maxlength="19" />
+          <span class="tarjeta-icon">💳</span>
+        </div>
+      </div>
+
+      <div class="campo-fila">
+        <div class="campo-grupo">
+          <label>Caducidad</label>
+          <input type="text" [value]="pagoCaducidad" (input)="formatearCaducidad($event)"
+            placeholder="MM/AA" maxlength="5" />
+        </div>
+        <div class="campo-grupo">
+          <label>CVV</label>
+          <input type="password" [(ngModel)]="pagoCVV" placeholder="•••" maxlength="4" />
+        </div>
+      </div>
+
+      <p class="pago-seguro">🔒 Pago seguro simulado · Tus datos no se almacenan</p>
+
+      <p class="mensaje error" *ngIf="pagoError">{{ pagoError }}</p>
+
+      <div class="pago-acciones">
+        <button class="btn-cancelar-pago" (click)="cerrarPago()">Cancelar</button>
+        <button class="btn-pagar" (click)="procesarPago()">
+          Pagar {{ precioTotal | number:'1.0-0' }}€
+        </button>
       </div>
     </div>
-    <!-- Botón eliminar solo si es la reseña del usuario logueado -->
-    <button
-      class="btn-eliminar-resena"
-      *ngIf="estaLogueado() && resena.usuario.nombre === getNombreUsuario()"
-      (click)="eliminarResena(resena.id)">
-      🗑️
-    </button>
-  </div>
-  <p class="resena-comentario">{{ resena.comentario }}</p>
-</div>
-  </div>
+
+  </dialog>
 
 </div>
 

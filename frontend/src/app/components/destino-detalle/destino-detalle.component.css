@@ -2,7 +2,7 @@
 .detalle-container {
   max-width: 900px;
   margin: 0 auto;
-  padding: 80px 1rem 3rem;
+  padding: 0 1rem 3rem;
 }
 
 .loading {
@@ -218,21 +218,6 @@
   background: #d68910;
 }
 
-.btn-eliminar-resena {
-  margin-left: auto;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  opacity: 0.5;
-  transition: opacity 0.2s;
-  padding: 0.2rem;
-}
-
-.btn-eliminar-resena:hover {
-  opacity: 1;
-}
-
 /* ===== ESTRELLAS ===== */
 .estrellas {
   display: flex;
@@ -357,3 +342,295 @@
   font-size: 0.95rem;
   line-height: 1.5;
 }
+
+/* ===== DIALOG DE PAGO ===== */
+.pago-dialog {
+  border: none;
+  border-radius: 16px;
+  padding: 0;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+.pago-dialog::backdrop {
+  background: rgba(0,0,0,0.55);
+}
+
+.pago-form, .pago-procesando, .pago-exito {
+  padding: 2rem;
+}
+
+/* HEADER */
+.pago-header {
+  margin-bottom: 1.25rem;
+}
+
+.pago-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+/* RESUMEN */
+.pago-resumen {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pago-resumen-destino {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pago-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.pago-resumen-destino strong {
+  display: block;
+  font-size: 0.95rem;
+  color: #2c3e50;
+}
+
+.pago-resumen-destino small {
+  color: #7f8c8d;
+  font-size: 0.8rem;
+}
+
+.pago-resumen-total {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.pago-resumen-total span {
+  display: block;
+  font-size: 0.78rem;
+  color: #7f8c8d;
+}
+
+.pago-resumen-total strong {
+  font-size: 1.3rem;
+  color: #2B7A78;
+}
+
+/* CAMPOS */
+.campo-grupo {
+  margin-bottom: 1rem;
+}
+
+.campo-grupo label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.35rem;
+}
+
+.campo-grupo input {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1.5px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.campo-grupo input:focus {
+  outline: none;
+  border-color: #2B7A78;
+}
+
+.tarjeta-input {
+  position: relative;
+}
+
+.tarjeta-input input {
+  padding-right: 2.5rem;
+  letter-spacing: 0.05em;
+}
+
+.tarjeta-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+}
+
+.campo-fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.pago-seguro {
+  font-size: 0.78rem;
+  color: #95a5a6;
+  text-align: center;
+  margin: 0.5rem 0 1rem;
+}
+
+/* ACCIONES */
+.pago-acciones {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.btn-cancelar-pago {
+  flex: 1;
+  padding: 0.8rem;
+  background: white;
+  border: 1.5px solid #e74c3c;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #e74c3c;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-cancelar-pago:hover {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-pagar {
+  flex: 2;
+  padding: 0.8rem;
+  background: #2B7A78;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+
+.btn-pagar:hover { background: #1f5a58; }
+
+/* PROCESANDO */
+.pago-procesando {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e8f4f3;
+  border-top-color: #2B7A78;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 1.5rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.pago-procesando p {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.pago-procesando small {
+  color: #95a5a6;
+  font-size: 0.85rem;
+}
+
+/* ÉXITO */
+.pago-exito {
+  text-align: center;
+  padding: 2.5rem 2rem;
+}
+
+.exito-icono {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.pago-exito h3 {
+  font-size: 1.4rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.pago-exito > p {
+  color: #7f8c8d;
+  margin-bottom: 1.25rem;
+}
+
+.numero-reserva {
+  background: #e8f4f3;
+  border-radius: 10px;
+  padding: 0.85rem 1.25rem;
+  margin-bottom: 0.75rem;
+  display: inline-block;
+  min-width: 200px;
+}
+
+.numero-reserva small {
+  display: block;
+  font-size: 0.78rem;
+  color: #7f8c8d;
+  margin-bottom: 0.25rem;
+}
+
+.numero-reserva strong {
+  font-size: 1.3rem;
+  color: #2B7A78;
+  letter-spacing: 0.05em;
+}
+
+.exito-detalle {
+  font-size: 0.88rem;
+  color: #95a5a6;
+  margin-bottom: 1.5rem;
+}
+
+.btn-cerrar-exito {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background: #2B7A78;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  transition: background 0.2s;
+}
+
+.btn-cerrar-exito:hover { background: #1f5a58; }
+
+.btn-ver-reservas {
+  display: block;
+  text-align: center;
+  color: #2B7A78;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.btn-ver-reservas:hover { text-decoration: underline; }
