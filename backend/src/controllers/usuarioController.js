@@ -1,7 +1,7 @@
-const { PrismaClient } = require('@prisma/client')
+const prisma = require('../prisma')
 const bcrypt = require('bcryptjs')
-const prisma = new PrismaClient()
 
+// Actualiza nombre y/o contraseña del usuario autenticado
 const actualizarPerfil = async (req, res) => {
   const { nombre, passwordActual, passwordNueva } = req.body
   const userId = req.usuario.id
@@ -12,12 +12,12 @@ const actualizarPerfil = async (req, res) => {
 
     const datosActualizar = {}
 
-    // Actualizar nombre
+    // Actualizar nombre si se proporcionó y es diferente al actual
     if (nombre && nombre.trim()) {
       datosActualizar.nombre = nombre.trim()
     }
 
-    // Actualizar contraseña
+    // Actualizar contraseña solo si se proporcionaron ambos campos
     if (passwordActual && passwordNueva) {
       const esValida = await bcrypt.compare(passwordActual, usuario.password)
       if (!esValida) return res.status(400).json({ error: 'La contraseña actual no es correcta' })
@@ -41,13 +41,11 @@ const actualizarPerfil = async (req, res) => {
   }
 }
 
+// Devuelve estadísticas personales del usuario autenticado
 const getEstadisticasUsuario = async (req, res) => {
   const userId = req.usuario.id
-
   try {
-    const reservas = await prisma.reserva.findMany({
-      where: { usuarioId: userId }
-    })
+    const reservas = await prisma.reserva.findMany({ where: { usuarioId: userId } })
 
     const totalReservas = reservas.length
     const reservasActivas = reservas.filter(r => r.estado === 'confirmada' || r.estado === 'pendiente').length

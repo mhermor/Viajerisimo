@@ -13,18 +13,22 @@ export class AuthService {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
+  // Comprueba si el código se ejecuta en el navegador (evita errores con SSR)
   private isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
   }
 
+  // Registra un nuevo usuario
   registro(datos: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/registro`, datos);
   }
 
+  // Autentica un usuario y devuelve el token JWT
   login(datos: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, datos);
   }
 
+  // Almacena el token JWT y datos del usuario en localStorage
   guardarToken(token: string, nombre: string, rol: string) {
     if (this.isBrowser()) {
       localStorage.setItem('token', token);
@@ -33,6 +37,7 @@ export class AuthService {
     }
   }
 
+  // Elimina todos los datos de sesión del localStorage
   cerrarSesion() {
     if (this.isBrowser()) {
       localStorage.removeItem('token');
@@ -53,24 +58,32 @@ export class AuthService {
     return this.isBrowser() ? localStorage.getItem('rol') : null;
   }
 
+  // Devuelve true si hay un token activo en localStorage
   estaLogueado(): boolean {
     return this.isBrowser() && !!localStorage.getItem('token');
   }
 
+  // Actualiza nombre y/o contraseña del perfil del usuario autenticado
   actualizarPerfil(datos: any): Observable<any> {
-  return this.http.put(`${environment.apiUrl}/usuarios/perfil`,   // PUT no POST
-    datos,
-    { headers: new HttpHeaders({ 'Authorization': `Bearer ${this.getToken()}` }) }
-  );
-}
+    return this.http.put(
+      `${environment.apiUrl}/usuarios/perfil`,
+      datos,
+      { headers: new HttpHeaders({ 'Authorization': `Bearer ${this.getToken()}` }) }
+    );
+  }
 
-getEstadisticas(): Observable<any> {
-  return this.http.get(`${environment.apiUrl}/usuarios/estadisticas`,
-    { headers: new HttpHeaders({ 'Authorization': `Bearer ${this.getToken()}` }) }
-  );
-}
+  // Obtiene estadísticas personales del usuario autenticado
+  getEstadisticas(): Observable<any> {
+    return this.http.get(
+      `${environment.apiUrl}/usuarios/estadisticas`,
+      { headers: new HttpHeaders({ 'Authorization': `Bearer ${this.getToken()}` }) }
+    );
+  }
 
-actualizarNombre(nombre: string) {
-  localStorage.setItem('nombre', nombre);
-}
+  // Actualiza el nombre en localStorage tras editar el perfil
+  actualizarNombre(nombre: string) {
+    if (this.isBrowser()) {
+      localStorage.setItem('nombre', nombre);
+    }
+  }
 }
