@@ -16,9 +16,9 @@ export class HomeComponent implements OnInit {
   constructor(private destinoService: DestinoService) {}
 
   ngOnInit() {
+    // Carga 6 destinos destacados: 2 de cada categoría (playa, montaña, ciudad)
     this.destinoService.getDestinos().subscribe({
       next: (res) => {
-        // Mostrar 6 destinos variados (2 de cada categoría)
         const playas = res.filter((d: any) => d.categoria === 'playa').slice(0, 2);
         const montanas = res.filter((d: any) => d.categoria === 'montaña').slice(0, 2);
         const ciudades = res.filter((d: any) => d.categoria === 'ciudad').slice(0, 2);

@@ -12,20 +12,23 @@ import { ReservaService } from '../../services/reserva.service';
   styleUrl: './usuario.component.css'
 })
 export class UsuarioComponent implements OnInit {
-  // Auth
+  // Referencia al dialog nativo HTML5 para editar perfil
+  @ViewChild('editarDialog') editarDialog!: ElementRef<HTMLDialogElement>;
+
+  // Formulario de login/registro
   modo: 'login' | 'registro' = 'login';
   nombre = '';
   email = '';
   password = '';
   mensaje = '';
 
-  // Reservas
+  // Lista de reservas del usuario
   reservas: any[] = [];
 
-  // Estadísticas
+  // Estadísticas personales del usuario
   stats = { totalReservas: 0, reservasActivas: 0, destinosVisitados: 0, gastoTotal: 0 };
 
-  // Editar perfil
+  // Formulario de edición de perfil
   mostrarEditarPerfil = false;
   editNombre = '';
   passwordActual = '';
@@ -40,6 +43,7 @@ export class UsuarioComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // Si ya está logueado como usuario normal, cargar datos al iniciar
     if (this.estaLogueado() && !this.esAdmin()) {
       this.cargarReservas();
       this.cargarEstadisticas();
@@ -50,6 +54,7 @@ export class UsuarioComponent implements OnInit {
   getNombre(): string { return this.authService.getNombre() || ''; }
   esAdmin(): boolean { return this.authService.getRol() === 'admin'; }
 
+  // Autentica al usuario y carga sus datos si no es admin
   login() {
     this.authService.login({ email: this.email, password: this.password }).subscribe({
       next: (res) => {
@@ -64,6 +69,7 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
+  // Registra un nuevo usuario y redirige al login
   registro() {
     this.authService.registro({ nombre: this.nombre, email: this.email, password: this.password }).subscribe({
       next: () => {
@@ -74,6 +80,7 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
+  // Carga las reservas del usuario autenticado
   cargarReservas() {
     this.reservaService.getReservas().subscribe({
       next: (res) => this.reservas = res,
@@ -81,6 +88,7 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
+  // Carga las estadísticas personales del usuario
   cargarEstadisticas() {
     this.authService.getEstadisticas().subscribe({
       next: (res) => this.stats = res,
@@ -88,6 +96,7 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
+  // Cancela una reserva tras confirmación del usuario
   cancelarReserva(id: number) {
     if (!confirm('¿Seguro que quieres cancelar esta reserva?')) return;
     this.reservaService.cancelarReserva(id).subscribe({
@@ -99,22 +108,22 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-@ViewChild('editarDialog') editarDialog!: ElementRef<HTMLDialogElement>;
+  // Abre el dialog de edición de perfil con los datos actuales
+  abrirEditarPerfil() {
+    this.editNombre = this.getNombre();
+    this.passwordActual = '';
+    this.passwordNueva = '';
+    this.passwordConfirmar = '';
+    this.mensajePerfil = '';
+    this.exitoPerfil = false;
+    this.editarDialog.nativeElement.showModal();
+  }
 
-abrirEditarPerfil() {
-  this.editNombre = this.getNombre();
-  this.passwordActual = '';
-  this.passwordNueva = '';
-  this.passwordConfirmar = '';
-  this.mensajePerfil = '';
-  this.exitoPerfil = false;
-  this.editarDialog.nativeElement.showModal();
-}
+  cerrarEditarPerfil() {
+    this.editarDialog.nativeElement.close();
+  }
 
-cerrarEditarPerfil() {
-  this.editarDialog.nativeElement.close();
-}
-
+  // Valida y envía los cambios del perfil al backend
   guardarPerfil() {
     this.mensajePerfil = '';
     this.exitoPerfil = false;
@@ -135,6 +144,7 @@ cerrarEditarPerfil() {
       }
     }
 
+    // Solo enviar los campos que han cambiado
     const datos: any = {};
     if (this.editNombre.trim() && this.editNombre.trim() !== this.getNombre()) {
       datos.nombre = this.editNombre.trim();
@@ -150,7 +160,7 @@ cerrarEditarPerfil() {
     }
 
     this.authService.actualizarPerfil(datos).subscribe({
-      next: (res) => {
+      next: () => {
         if (datos.nombre) this.authService.actualizarNombre(datos.nombre);
         this.exitoPerfil = true;
         this.mensajePerfil = '¡Perfil actualizado correctamente!';
@@ -164,6 +174,7 @@ cerrarEditarPerfil() {
     });
   }
 
+  // Cierra la sesión y limpia los datos locales
   logout() {
     this.authService.cerrarSesion();
     this.reservas = [];

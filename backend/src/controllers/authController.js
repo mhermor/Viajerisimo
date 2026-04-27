@@ -2,11 +2,14 @@ const prisma = require('../prisma')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+// Registra un nuevo usuario con contraseña hasheada
 const registro = async (req, res) => {
   const { nombre, email, password } = req.body
   try {
+    // Verificar que el email no esté ya registrado
     const existe = await prisma.usuario.findUnique({ where: { email } })
     if (existe) return res.status(400).json({ error: 'El email ya está registrado' })
+
     const hash = await bcrypt.hash(password, 10)
     const usuario = await prisma.usuario.create({
       data: { nombre, email, password: hash }
@@ -17,13 +20,16 @@ const registro = async (req, res) => {
   }
 }
 
+// Autentica un usuario y devuelve un token JWT válido 24 horas
 const login = async (req, res) => {
   const { email, password } = req.body
   try {
     const usuario = await prisma.usuario.findUnique({ where: { email } })
     if (!usuario) return res.status(400).json({ error: 'Usuario no encontrado' })
+
     const valido = await bcrypt.compare(password, usuario.password)
     if (!valido) return res.status(400).json({ error: 'Contraseña incorrecta' })
+
     const token = jwt.sign(
       { id: usuario.id, rol: usuario.rol },
       process.env.JWT_SECRET,

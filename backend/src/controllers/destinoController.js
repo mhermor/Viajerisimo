@@ -1,5 +1,6 @@
 const prisma = require('../prisma')
 
+// Devuelve todos los destinos, con filtro opcional por categoría
 const getDestinos = async (req, res) => {
   try {
     const { categoria } = req.query
@@ -12,11 +13,16 @@ const getDestinos = async (req, res) => {
   }
 }
 
+// Devuelve el detalle de un destino incluyendo sus reseñas con nombre de usuario
 const getDestino = async (req, res) => {
   try {
     const destino = await prisma.destino.findUnique({
       where: { id: parseInt(req.params.id) },
-      include: { resenas: { include: { usuario: { select: { nombre: true } } } } }
+      include: {
+        resenas: {
+          include: { usuario: { select: { nombre: true } } }
+        }
+      }
     })
     if (!destino) return res.status(404).json({ error: 'Destino no encontrado' })
     res.json(destino)
@@ -25,6 +31,7 @@ const getDestino = async (req, res) => {
   }
 }
 
+// Crea un nuevo destino (requiere rol admin)
 const crearDestino = async (req, res) => {
   const { nombre, descripcion, categoria, imagen, pais, precio } = req.body
   try {
@@ -37,6 +44,7 @@ const crearDestino = async (req, res) => {
   }
 }
 
+// Actualiza los datos de un destino existente (requiere rol admin)
 const editarDestino = async (req, res) => {
   const { nombre, descripcion, categoria, imagen, pais, precio } = req.body
   try {
@@ -50,6 +58,7 @@ const editarDestino = async (req, res) => {
   }
 }
 
+// Elimina un destino por ID (requiere rol admin)
 const eliminarDestino = async (req, res) => {
   try {
     await prisma.destino.delete({ where: { id: parseInt(req.params.id) } })

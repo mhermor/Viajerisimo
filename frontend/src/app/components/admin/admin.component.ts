@@ -14,7 +14,7 @@ import { AdminService } from '../../services/admin.service';
   styleUrl: './admin.component.css'
 })
 export class AdminComponent implements OnInit {
-  // Sistema de pestañas
+  // Sistema de pestañas del panel admin
   tabActiva: 'destinos' | 'reservas' | 'usuarios' = 'destinos';
 
   // Estadísticas del dashboard
@@ -57,6 +57,7 @@ export class AdminComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // Redirigir si el usuario no está autenticado o no tiene rol admin
     if (!this.authService.estaLogueado() || this.authService.getRol() !== 'admin') {
       this.router.navigate(['/']);
       return;
@@ -66,18 +67,21 @@ export class AdminComponent implements OnInit {
   }
 
   // ============== ESTADÍSTICAS ==============
+
+  // Carga las métricas generales del dashboard
   cargarEstadisticas() {
     this.adminService.getEstadisticas().subscribe({
       next: (res) => this.estadisticas = res,
-      error: () => console.error('Error al cargar estadísticas')
+      error: () => this.mensaje = 'Error al cargar estadísticas'
     });
   }
 
   // ============== CAMBIO DE PESTAÑAS ==============
+
+  // Cambia la pestaña activa y carga datos si es la primera vez que se accede
   cambiarTab(tab: 'destinos' | 'reservas' | 'usuarios') {
     this.tabActiva = tab;
     this.mensaje = '';
-    
     if (tab === 'reservas' && this.reservas.length === 0) {
       this.cargarReservas();
     }
@@ -87,6 +91,7 @@ export class AdminComponent implements OnInit {
   }
 
   // ============== GESTIÓN DE DESTINOS ==============
+
   cargarDestinos() {
     this.destinoService.getDestinos().subscribe({
       next: (res) => {
@@ -97,12 +102,13 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  // Filtra destinos por nombre, país o categoría
   filtrarDestinos() {
     if (!this.busquedaDestino) {
       this.destinosFiltrados = this.destinos;
     } else {
       const termino = this.busquedaDestino.toLowerCase();
-      this.destinosFiltrados = this.destinos.filter(d => 
+      this.destinosFiltrados = this.destinos.filter(d =>
         d.nombre.toLowerCase().includes(termino) ||
         d.pais.toLowerCase().includes(termino) ||
         d.categoria.toLowerCase().includes(termino)
@@ -110,18 +116,21 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  // Prepara el formulario para crear un destino nuevo
   nuevoDestino() {
     this.editando = false;
     this.destinoActual = { id: null, nombre: '', descripcion: '', categoria: '', imagen: '', pais: '', precio: 0 };
     this.mostrarFormulario = true;
   }
 
+  // Prepara el formulario para editar un destino existente
   editarDestino(destino: any) {
     this.editando = true;
     this.destinoActual = { ...destino };
     this.mostrarFormulario = true;
   }
 
+  // Guarda el destino (crea o edita según el estado de `editando`)
   guardarDestino() {
     if (this.editando) {
       this.destinoService.editarDestino(this.destinoActual.id, this.destinoActual).subscribe({
@@ -159,6 +168,8 @@ export class AdminComponent implements OnInit {
   }
 
   // ============== GESTIÓN DE RESERVAS ==============
+
+  // Carga reservas con filtro opcional por estado
   cargarReservas() {
     this.adminService.getTodasReservas(this.filtroEstadoReserva).subscribe({
       next: (res) => this.reservas = res,
@@ -170,6 +181,7 @@ export class AdminComponent implements OnInit {
     this.cargarReservas();
   }
 
+  // Actualiza el estado de una reserva y recarga estadísticas
   cambiarEstadoReserva(reserva: any, nuevoEstado: string) {
     this.adminService.cambiarEstadoReserva(reserva.id, nuevoEstado).subscribe({
       next: () => {
@@ -182,6 +194,7 @@ export class AdminComponent implements OnInit {
   }
 
   // ============== GESTIÓN DE USUARIOS ==============
+
   cargarUsuarios() {
     this.adminService.getTodosUsuarios().subscribe({
       next: (res) => this.usuarios = res,

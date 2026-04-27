@@ -1,5 +1,6 @@
 const prisma = require('../prisma')
 
+// Devuelve todas las reservas del usuario autenticado con datos del destino
 const getReservas = async (req, res) => {
   try {
     const reservas = await prisma.reserva.findMany({
@@ -12,16 +13,17 @@ const getReservas = async (req, res) => {
   }
 }
 
+// Crea una nueva reserva calculando el precio total automáticamente
 const crearReserva = async (req, res) => {
   const { destinoId, fechaInicio, fechaFin, numPersonas = 1 } = req.body
   try {
-    // Obtener el destino para calcular el precio
+    // Obtener el destino para calcular el precio por día
     const destino = await prisma.destino.findUnique({
       where: { id: parseInt(destinoId) }
     })
     if (!destino) return res.status(404).json({ error: 'Destino no encontrado' })
 
-    // Calcular número de días y precio total
+    // Calcular días y precio total: precio/día × días × personas
     const inicio = new Date(fechaInicio)
     const fin = new Date(fechaFin)
     const dias = Math.ceil((fin - inicio) / (1000 * 60 * 60 * 24))
@@ -34,7 +36,7 @@ const crearReserva = async (req, res) => {
         fechaInicio: inicio,
         fechaFin: fin,
         numPersonas: parseInt(numPersonas),
-        precioTotal: precioTotal
+        precioTotal
       }
     })
     res.json(reserva)
@@ -43,6 +45,7 @@ const crearReserva = async (req, res) => {
   }
 }
 
+// Cancela una reserva verificando que pertenece al usuario autenticado
 const cancelarReserva = async (req, res) => {
   try {
     const reserva = await prisma.reserva.findUnique({
@@ -50,6 +53,7 @@ const cancelarReserva = async (req, res) => {
     })
     if (!reserva) return res.status(404).json({ error: 'Reserva no encontrada' })
     if (reserva.usuarioId !== req.usuario.id) return res.status(403).json({ error: 'No autorizado' })
+
     await prisma.reserva.update({
       where: { id: parseInt(req.params.id) },
       data: { estado: 'cancelada' }

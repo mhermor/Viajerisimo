@@ -1,5 +1,6 @@
 const prisma = require('../prisma')
 
+// Devuelve todas las reseñas de un destino específico
 const getResenas = async (req, res) => {
   try {
     const resenas = await prisma.resena.findMany({
@@ -12,6 +13,7 @@ const getResenas = async (req, res) => {
   }
 }
 
+// Crea una nueva reseña asociada al usuario autenticado
 const crearResena = async (req, res) => {
   const { destinoId, puntuacion, comentario } = req.body
   try {
@@ -29,6 +31,7 @@ const crearResena = async (req, res) => {
   }
 }
 
+// Elimina una reseña verificando que pertenece al usuario autenticado
 const eliminarResena = async (req, res) => {
   try {
     const resena = await prisma.resena.findUnique({
@@ -36,6 +39,7 @@ const eliminarResena = async (req, res) => {
     })
     if (!resena) return res.status(404).json({ error: 'Reseña no encontrada' })
     if (resena.usuarioId !== req.usuario.id) return res.status(403).json({ error: 'No autorizado' })
+
     await prisma.resena.delete({ where: { id: parseInt(req.params.id) } })
     res.json({ mensaje: 'Reseña eliminada correctamente' })
   } catch (error) {

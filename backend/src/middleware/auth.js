@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken')
 
+// Middleware que verifica el token JWT en el header Authorization
+// Inyecta los datos del usuario en req.usuario para los controladores
 const verificarToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
