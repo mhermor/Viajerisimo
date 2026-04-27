@@ -4,7 +4,7 @@ Plataforma web para la gestión y reserva de destinos turísticos. Proyecto fina
 
 ## 🔗 Demo en producción
 
-- **Frontend:** https://viajerisimo.vercel.app
+- **Frontend:** https://viajerisimo-iexr.vercel.app/
 - **Backend:** https://viajerisimo-backend.onrender.com
 
 > ⚠️ El backend está alojado en Render (plan gratuito). La primera petición puede tardar ~30 segundos en despertar el servidor tras un periodo de inactividad.
